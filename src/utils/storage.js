@@ -36,6 +36,7 @@ export function defaultState() {
     timelineDates: {},  // 她手动填写的日期 { 节点下标: '2025.11.16' }
     timelineQuizDone: false, // 时间胶囊「回忆填空」互动是否已完成
     futureChoices: [],
+    futureCustom: [],   // 她自己添加的愿望（文本数组）
     videoWatched: false,
     letterOpened: false,
     finalCompleted: false,

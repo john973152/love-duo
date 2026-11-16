@@ -116,6 +116,20 @@
   display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;flex-shrink:0}
 .wish.on .wish-box{background:var(--c-primary);border-color:var(--c-primary)}
 .wish-text{font-size:15px;line-height:1.5}
+/* 自定义愿望：行容器 + 删除按钮 + "+"入口 + 输入行 */
+.wish-row{display:flex;align-items:stretch;gap:8px}
+.wish-row .wish{flex:1}
+.wish-del{flex-shrink:0;width:34px;border:none;background:var(--c-card);border-radius:12px;
+  box-shadow:var(--shadow);color:var(--c-text-light);font-size:14px;cursor:pointer;transition:all .2s}
+.wish-del:active{transform:scale(.92);color:var(--c-primary)}
+.wish-add{width:100%;border:2px dashed var(--c-accent);background:transparent;color:var(--c-text-light)}
+.wish-add .wish-box{border-style:dashed}
+.wish-add.adding{opacity:.6}
+.wish-input-row{display:flex;gap:8px;margin-top:2px}
+.wish-input-row input{flex:1;padding:12px 14px;font-size:15px;border:2px solid var(--c-accent);
+  border-radius:12px;background:var(--c-card);color:var(--c-text);outline:none;font-family:inherit}
+.wish-input-row input:focus{border-color:var(--c-primary)}
+.wish-input-row .btn{flex-shrink:0;padding:0 18px}
 .btn[disabled]{opacity:.45}
 .order-card{position:relative;background:linear-gradient(170deg,#FFFDF8,#FFF3E3);
   border-radius:16px;padding:22px 18px;box-shadow:0 12px 30px rgba(232,61,50,.18);

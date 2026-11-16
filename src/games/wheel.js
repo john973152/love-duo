@@ -149,7 +149,7 @@ export function render(el) {
              </div>`;
     const inviteBtn = [{ text: '📣 邀请男朋友助力', primary: true, onClick: () => showInvite() }];
 
-    // 第一次：真的中了 52 元券（拼多多式：中了也要助力才能到账）
+    // 第一次：真的中了「身体乳」（拼多多式：中了也要助力才能到账）
     if (attempts === 1) {
       sfx.chime();
       confetti(15);

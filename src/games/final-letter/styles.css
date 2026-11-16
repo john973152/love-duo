@@ -372,6 +372,43 @@
 }
 .fl-memo-sub { margin: 0; color: #e3cfae; font-size: 14.5px; letter-spacing: 2px; line-height: 2; }
 
+/* ---------- 第二周年拍照巧思 ---------- */
+.fl-camera-zone { position: relative; z-index: 5; margin-top: 34px; text-align: center; max-width: 320px; }
+.cam-story { margin: 0 0 6px; color: #e8d5b8; font-size: 14px; letter-spacing: 1.5px; line-height: 1.9; }
+.cam-guide { animation: flFadeUp 1s .5s backwards; }
+.cam-btn { margin-top: 16px; font-size: 15px; padding: 12px 26px; }
+.cam-note { margin: 12px 0 0; color: #bfa47f; font-size: 12.5px; letter-spacing: 1px; }
+.cam-frame {
+  width: 250px; height: 250px; margin: 0 auto;
+  border-radius: 10px; overflow: hidden;
+  border: 3px solid rgba(255, 240, 214, .75);
+  box-shadow: 0 14px 40px rgba(0,0,0,.5);
+  background: #1c130d;
+  animation: flFadeUp .6s backwards;
+}
+.cam-frame video { width: 100%; height: 100%; object-fit: cover; display: block; transform: scaleX(-1); }
+.cam-actions { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 16px; }
+.cam-cancel { border: none; background: none; color: #bfa47f; font-size: 13px; letter-spacing: 1px; cursor: pointer; padding: 10px; font-family: inherit; }
+.cam-cancel:active { opacity: .6; }
+.cam-result { animation: flFadeUp .8s backwards; }
+.cam-result.just-shot { animation: flShotPop .5s cubic-bezier(.3,1.4,.5,1) backwards; }
+@keyframes flShotPop {
+  0% { transform: scale(1.08); filter: brightness(2); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+.cam-polaroid {
+  width: 232px; margin: 0 auto; padding: 9px 9px 10px;
+  background: #fffdf8; border: 1px solid rgba(138,106,82,.15);
+  box-shadow: 0 14px 36px rgba(0,0,0,.5);
+  transform: rotate(-2.5deg);
+}
+.cam-polaroid img { width: 100%; height: 210px; object-fit: cover; display: block; background: #efe6d2; }
+.cam-polaroid figcaption { display: flex; justify-content: space-between; align-items: baseline; padding-top: 8px; }
+.cam-cap { font-size: 12.5px; color: #8a6a52; letter-spacing: 1px; }
+.cam-date { font-size: 10.5px; color: #b39578; }
+.cam-retake { margin-top: 10px; border: none; background: none; color: #c9a06a; font-size: 13px; letter-spacing: 1px; cursor: pointer; font-family: inherit; text-decoration: underline dotted rgba(201,160,106,.6); }
+.cam-retake:active { opacity: .6; }
+
 /* ---------- 桌面端适配 ---------- */
 @media (min-width: 700px) {
   .fl-env { width: 300px; height: 200px; }

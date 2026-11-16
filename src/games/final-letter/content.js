@@ -72,7 +72,7 @@ export const LETTER = {
   memorial: {
     title: '我们的第一周年',
     sub: '故事还没有结束，下一页，我们继续一起写。',
-    photo: 'assets/images/photos/letter/9.jpg',
+    photo: 'assets/images/photos/letter/first.jpg',  // 我们的第一张合照（31.jpg）
     bottom: '谢谢你陪我走过这一年。',
     btn: '重新看看我们的故事'
   }

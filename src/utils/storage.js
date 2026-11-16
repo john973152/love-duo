@@ -45,15 +45,10 @@ export function defaultState() {
 }
 
 export function loadProgress() {
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (!raw) return defaultState();
-    const merged = { ...defaultState(), ...JSON.parse(raw) };
-    if (!merged.unlockedStages.includes('wheel')) merged.unlockedStages.push('wheel');
-    return merged;
-  } catch {
-    return defaultState();
-  }
+  // 2026-11-16：每次进入网站都重新开始闯关（进度不跨会话保留）。
+  // 注意：音频偏好（ld-audio-v2）和二周年合照（ld-anniv2-photo-v1）使用独立存储键，不受影响。
+  try { localStorage.removeItem(KEY); } catch { /* noop */ }
+  return defaultState();
 }
 
 export function saveProgress(state) {

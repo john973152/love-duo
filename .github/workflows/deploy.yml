@@ -26,6 +26,8 @@ jobs:
       - run: npm ci
       - run: npm run build
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true          # 若 Pages 站点未开启，自动开启
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

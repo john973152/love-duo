@@ -1,0 +1,389 @@
+/* ============================================================
+   最后一封信 · To My Love
+   奶油白 / 暖棕 / 浅粉 / 香槟金 · 胶片感 · 手机优先
+   ============================================================ */
+
+.fl-root {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  min-height: 100vh;
+  background: linear-gradient(180deg, #241a14 0%, #3a2a1e 55%, #4a3524 100%);
+  overflow: hidden;
+  font-family: 'Kaiti SC', 'STKaiti', 'KaiTi', 'Noto Serif SC', serif;
+}
+
+/* ---------- 通用 ---------- */
+.fl-scene { position: relative; min-height: 100vh; }
+.fl-room { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 20px 40px; box-sizing: border-box; }
+
+.fl-btn {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 13px 34px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #d9b98a, #c9a06a);
+  color: #fff8ee;
+  font-size: 16px;
+  font-family: inherit;
+  letter-spacing: 2px;
+  box-shadow: 0 6px 22px rgba(217, 185, 138, .35), inset 0 1px 0 rgba(255,255,255,.4);
+  cursor: pointer;
+  transition: transform .25s, box-shadow .25s;
+}
+.fl-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(217,185,138,.45); }
+.fl-btn:active { transform: scale(.97); }
+
+.fl-act1-text { position: relative; z-index: 5; text-align: center; margin-top: 30px; transition: opacity .8s; }
+.fl-act1-text.fade-out { opacity: 0; pointer-events: none; }
+.fl-hint1 { color: #e8d5b8; font-size: 17px; letter-spacing: 3px; margin: 0 0 8px; opacity: 0; animation: flFadeUp 1.2s .4s forwards; }
+.fl-hint2 { color: #d9c4a5; font-size: 14px; letter-spacing: 2px; margin: 0; opacity: 0; animation: flFadeUp 1.2s 1s forwards; }
+.fl-act1-text .fl-btn { opacity: 0; animation: flFadeUp 1s 1.6s forwards; }
+.fl-act1-text.shown .fl-btn, .fl-act1-text.shown .fl-hint2 { opacity: 1; animation: none; }
+
+/* 静音按钮 */
+.fl-mute {
+  position: fixed; top: 14px; right: 14px; z-index: 60;
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(30, 20, 14, .55); backdrop-filter: blur(4px);
+  font-size: 17px; cursor: pointer; line-height: 1;
+}
+
+/* ---------- 氛围：光晕 / 尘埃 / 花瓣 / 光斑 / 爱心 ---------- */
+.fl-glow {
+  position: absolute; top: -12%; left: 50%; transform: translateX(-50%);
+  width: 130vw; height: 70vh; pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(255, 214, 150, .28) 0%, rgba(255,214,150,.08) 40%, transparent 70%);
+}
+.fl-glow.warm { background: radial-gradient(ellipse at center, rgba(255, 190, 170, .3) 0%, rgba(255,190,170,.1) 42%, transparent 70%); }
+
+.fl-dust i, .fl-bokeh i {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  background: rgba(255, 232, 190, .8);
+  animation: flFloat linear infinite;
+}
+.fl-dust i { width: 3px; height: 3px; opacity: .5; }
+.fl-bokeh i { width: 10px; height: 10px; opacity: .25; filter: blur(2px); }
+.fl-dust i:nth-child(3n), .fl-bokeh i:nth-child(3n) { width: 2px; height: 2px; animation-duration: 14s; }
+.fl-dust i:nth-child(4n), .fl-bokeh i:nth-child(4n) { animation-duration: 20s; background: rgba(255,200,170,.7); }
+
+.fl-petals i {
+  position: absolute; top: -6%; pointer-events: none;
+  width: 12px; height: 12px;
+  background: linear-gradient(135deg, #f2c9c4, #e8a9a2);
+  border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+  opacity: .65;
+  animation: flPetal linear infinite;
+}
+.fl-hearts i {
+  position: absolute; bottom: -4%; pointer-events: none;
+  font-size: 13px; font-style: normal; color: rgba(242, 170, 165, .7);
+  animation: flHeartUp linear infinite;
+}
+
+@keyframes flFloat {
+  0%   { transform: translate(0, 105vh); opacity: 0; }
+  12%  { opacity: .7; }
+  85%  { opacity: .5; }
+  100% { transform: translate(28px, -6vh); opacity: 0; }
+}
+@keyframes flPetal {
+  0%   { transform: translate(0, -4vh) rotate(0deg); opacity: 0; }
+  10%  { opacity: .7; }
+  100% { transform: translate(-40px, 108vh) rotate(340deg); opacity: 0; }
+}
+@keyframes flHeartUp {
+  0%   { transform: translate(0, 0) scale(.7); opacity: 0; }
+  15%  { opacity: .8; }
+  100% { transform: translate(24px, -105vh) scale(1.15); opacity: 0; }
+}
+@keyframes flFadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- 第一幕：书桌与信封 ---------- */
+.fl-desk {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 26vh;
+  background: linear-gradient(180deg, transparent 0%, rgba(90, 62, 40, .55) 30%, rgba(58, 40, 26, .85) 100%);
+  pointer-events: none;
+}
+
+.fl-env-wrap { position: relative; z-index: 4; perspective: 1100px; transition: transform 1.4s cubic-bezier(.22,.9,.3,1); }
+.fl-env-wrap.zooming { transform: scale(1.5) translateY(-14px); }
+.fl-env-wrap.small { transform: scale(.62); margin-top: -30px; }
+.fl-env-wrap.shrink { transition: transform 1.6s cubic-bezier(.5,0,.8,.4), opacity 1.6s; transform: scale(.16) translateY(-30px); opacity: 0; }
+
+.fl-env {
+  position: relative;
+  width: 250px; height: 168px;
+  animation: flEnvFloat 4.5s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+@keyframes flEnvFloat {
+  0%, 100% { transform: translateY(0) rotate(-1.2deg); }
+  50%      { transform: translateY(-9px) rotate(1.2deg); }
+}
+
+.fl-env-back {
+  position: absolute; inset: 0; border-radius: 8px;
+  background: linear-gradient(160deg, #fdf6ea 0%, #f6e9d2 100%);
+  box-shadow: 0 18px 46px rgba(0,0,0,.5), 0 2px 8px rgba(0,0,0,.25);
+}
+.fl-env-front {
+  position: absolute; inset: 0; border-radius: 8px; z-index: 2;
+  background:
+    linear-gradient(135deg, rgba(201,160,106,.12) 0%, transparent 45%),
+    linear-gradient(255deg, rgba(201,160,106,.10) 0%, transparent 45%),
+    linear-gradient(180deg, #f9efdc 0%, #f1e0c4 100%);
+  clip-path: polygon(0 32%, 50% 72%, 100% 32%, 100% 100%, 0 100%);
+}
+/* 信封纸纹 */
+.fl-env-front::before, .fl-env-back::before {
+  content: ''; position: absolute; inset: 0; border-radius: 8px; pointer-events: none;
+  background: repeating-linear-gradient(45deg, rgba(160,120,70,.045) 0 2px, transparent 2px 5px);
+}
+.fl-env-flap {
+  position: absolute; top: 0; left: 0; right: 0; height: 62%; z-index: 3;
+  background: linear-gradient(180deg, #fbf3e2 0%, #f3e3c6 100%);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  border-radius: 8px 8px 0 0;
+  transform-origin: top center;
+  transition: transform 1s cubic-bezier(.6,0,.3,1);
+  box-shadow: 0 4px 10px rgba(0,0,0,.12);
+}
+.fl-env.opened .fl-env-flap { transform: rotateX(-168deg); z-index: 1; }
+.fl-env-flap.closed { transform: none; }
+
+.fl-seal {
+  position: absolute; top: 50%; left: 50%; z-index: 6;
+  width: 44px; height: 44px; margin: -26px 0 0 -22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #e2756b, #b23f38 62%, #8e2f2a);
+  box-shadow: 0 3px 9px rgba(0,0,0,.4), inset 0 2px 4px rgba(255,255,255,.28);
+  display: flex; align-items: center; justify-content: center;
+  color: #ffd9d0; font-size: 19px;
+  transition: opacity .5s;
+}
+.fl-seal::after {
+  content: ''; position: absolute; inset: -4px; border-radius: 50%;
+  border: 2px dotted rgba(255,255,255,.35);
+}
+/* 裂纹（伪元素，cracking 时显现） */
+.fl-seal::before {
+  content: ''; position: absolute; inset: 0; border-radius: 50%;
+  background:
+    linear-gradient(28deg, transparent 46%, rgba(60,10,8,.85) 47% 49%, transparent 50%),
+    linear-gradient(-52deg, transparent 44%, rgba(60,10,8,.7) 45% 47%, transparent 48%);
+  opacity: 0; transition: opacity .5s;
+}
+.fl-env.cracking .fl-seal::before { opacity: .55; }
+.fl-env.cracking .fl-seal { animation: flSealShake .45s ease-in-out 2; }
+@keyframes flSealShake {
+  0%, 100% { transform: rotate(0deg); }
+  30% { transform: rotate(-7deg); }
+  65% { transform: rotate(6deg); }
+}
+.fl-env.cracked .fl-seal { opacity: 0; transform: scale(.6); }
+
+.fl-heart-burst {
+  position: absolute; left: 50%; top: 50%; z-index: 7;
+  font-size: 13px; font-style: normal; color: #f2a9a2;
+  pointer-events: none;
+  animation: flHeartBurst 1.1s cubic-bezier(.2,.7,.4,1) forwards;
+}
+@keyframes flHeartBurst {
+  0%   { transform: translate(0, 0) scale(.5) rotate(0deg); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(1.25) rotate(var(--rot)); opacity: 0; }
+}
+
+.fl-env-addr {
+  position: absolute; z-index: 2; left: 0; right: 0; bottom: 16px;
+  text-align: center; pointer-events: none;
+}
+.fl-env-to {
+  margin: 0; font-size: 21px; letter-spacing: 4px; color: #8a6a52;
+  text-shadow: 0 1px 0 rgba(255,255,255,.6);
+}
+.fl-env-sub { margin: 5px 0 0; font-size: 11px; letter-spacing: 2px; color: #b39578; }
+.fl-env.opened .fl-env-addr, .fl-env.pulling .fl-env-addr { transition: opacity .6s; opacity: 0; }
+
+.fl-fade-away { opacity: 0 !important; transition: opacity .7s; pointer-events: none; }
+
+/* 信封内露出的信纸一角 */
+.fl-paper-peek {
+  position: absolute; z-index: 1; left: 50%; top: 8px;
+  width: 190px; height: 200px; margin-left: -95px;
+  background:
+    repeating-linear-gradient(180deg, transparent 0 24px, rgba(138,106,82,.13) 24px 25px),
+    linear-gradient(180deg, #fffdf6, #fbf3df);
+  border-radius: 4px; box-shadow: 0 4px 14px rgba(0,0,0,.25);
+  display: flex; align-items: flex-start; justify-content: center;
+  transition: transform 1.3s cubic-bezier(.3,.7,.3,1);
+}
+.fl-paper-peek span { font-size: 20px; margin: 12px 0 0 0; filter: drop-shadow(0 1px 2px rgba(0,0,0,.15)); }
+.fl-env.pulling .fl-paper-peek { transform: translateY(-190px); }
+
+/* ---------- 第三幕：信纸阅读 ---------- */
+.fl-reading {
+  position: relative; z-index: 10;
+  height: 100vh;
+  padding: 4vh 14px 6vh;
+  box-sizing: border-box;
+  animation: flPaperIn 1.1s cubic-bezier(.25,.8,.3,1);
+}
+@keyframes flPaperIn {
+  from { opacity: 0; transform: scale(.55) translateY(140px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.fl-reading.folding { transition: transform 1.3s cubic-bezier(.6,0,.8,.4), opacity 1.3s; transform: scale(.3) translateY(60px); opacity: 0; pointer-events: none; }
+
+.fl-paper {
+  position: relative;
+  max-width: 560px; height: 100%; margin: 0 auto;
+  background:
+    linear-gradient(180deg, rgba(255,250,238,0) 0%, rgba(255,250,238,0) 100%),
+    linear-gradient(175deg, #fdf8ec 0%, #f8efdb 100%);
+  border-radius: 6px;
+  box-shadow: 0 24px 60px rgba(0,0,0,.55), 0 2px 10px rgba(0,0,0,.3);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 30px 22px 44px;
+  cursor: pointer;
+}
+/* 信纸横线与左侧红线 */
+.fl-paper::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: 6px;
+  background:
+    repeating-linear-gradient(180deg, transparent 0 34px, rgba(138,106,82,.10) 34px 35px),
+    linear-gradient(90deg, transparent 26px, rgba(194,120,110,.30) 26px 27.5px, transparent 27.5px);
+}
+.fl-paper::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 10px; pointer-events: none;
+  background: linear-gradient(180deg, rgba(120,85,55,.14), transparent);
+}
+.fl-paper-lines { height: 1px; }
+
+.fl-letter-body { position: relative; max-width: 460px; margin: 0 auto; }
+
+.fl-line {
+  min-height: 36px; margin: 0 0 26px 0;
+  padding-left: 18px;
+  font-size: 16.5px; line-height: 35px; letter-spacing: 1.5px;
+  color: #5d4632;
+}
+.fl-line.typing::after {
+  content: '▏'; color: #c9a06a; animation: flCaret .8s step-end infinite;
+}
+@keyframes flCaret { 50% { opacity: 0; } }
+
+/* 拍立得 */
+.fl-polaroid {
+  margin: 8px auto 34px; width: 218px;
+  opacity: 0; transform: rotate(6deg) translateY(26px) scale(.92);
+  transition: opacity .9s ease, transform .9s cubic-bezier(.25,.8,.3,1);
+}
+.fl-polaroid:nth-of-type(even) { transform: rotate(-5deg) translateY(26px) scale(.92); }
+.fl-polaroid.shown { opacity: 1; transform: rotate(var(--tilt, 3deg)) translateY(0) scale(1); }
+.fl-polaroid.shown:nth-of-type(even) { transform: rotate(-3deg) translateY(0) scale(1); }
+
+.pl-frame {
+  background: #fffdf8; padding: 9px 9px 12px;
+  box-shadow: 0 10px 26px rgba(0,0,0,.4), 0 2px 6px rgba(0,0,0,.2);
+  border: 1px solid rgba(138,106,82,.15);
+}
+.pl-img { height: 158px; overflow: hidden; background: #efe6d2; }
+.pl-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pl-img .img-placeholder { height: 158px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #a08a6e; background: repeating-linear-gradient(45deg, #f3ead6 0 8px, #ede2c8 8px 16px); }
+.fl-polaroid figcaption {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding-top: 8px;
+}
+.pl-cap { font-size: 13px; color: #8a6a52; letter-spacing: 1px; }
+.pl-date { font-size: 11px; color: #b39578; }
+
+/* 落款 */
+.fl-signature {
+  margin-top: 44px; text-align: right;
+  opacity: 0; transform: translateY(18px);
+  transition: opacity 1.4s, transform 1.4s;
+}
+.fl-signature.shown { opacity: 1; transform: translateY(0); }
+.fl-sig-line { margin: 0 0 10px; font-size: 17px; letter-spacing: 3px; color: #5d4632; }
+.fl-keep-wrap { text-align: center; margin-top: 30px; animation: flFadeUp 1s forwards; }
+
+/* ---------- 第五幕：珍藏 ---------- */
+.fl-keep-tip {
+  position: relative; z-index: 5;
+  margin-top: 34px; color: #e8d5b8; font-size: 15px; letter-spacing: 2px;
+  opacity: 0; animation: flFadeUp 1s 1.2s forwards;
+}
+
+/* 周年纪念邮戳 */
+.fl-postmark {
+  position: absolute; top: 18px; right: 16px; z-index: 5;
+  width: 74px; height: 74px;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: rotate(-14deg) scale(1.6);
+  animation: flStamp .55s cubic-bezier(.3,1.4,.5,1) .7s forwards;
+}
+@keyframes flStamp {
+  to { opacity: .92; transform: rotate(-14deg) scale(1); }
+}
+.pm-ring {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 2.5px dashed rgba(140, 90, 60, .75);
+}
+.pm-text {
+  font-size: 10px; line-height: 1.5; text-align: center;
+  color: rgba(140, 90, 60, .85); letter-spacing: 1px; font-family: serif;
+}
+.fl-env.stamped { animation: none; }
+
+/* ---------- 第六幕：纪念画面 ---------- */
+.fl-memorial .fl-room { justify-content: flex-start; padding-top: 9vh; }
+.fl-memo-card {
+  position: relative; z-index: 5;
+  text-align: center;
+  animation: flFadeUp 1.4s .2s backwards;
+}
+.fl-memo-title {
+  margin: 0 0 22px;
+  font-size: 30px; font-weight: normal; letter-spacing: 6px;
+  color: #f5e6c8;
+  text-shadow: 0 2px 18px rgba(255, 214, 150, .35);
+}
+.fl-memo-photo {
+  width: 240px; height: 240px; margin: 0 auto 24px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 240, 214, .8);
+  box-shadow: 0 0 0 10px rgba(255,240,214,.12), 0 18px 50px rgba(0,0,0,.5);
+  overflow: hidden;
+  animation: flMemoGlow 4s ease-in-out infinite;
+}
+.fl-memo-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.fl-memo-photo .img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #a08a6e; }
+@keyframes flMemoGlow {
+  0%, 100% { box-shadow: 0 0 0 10px rgba(255,240,214,.12), 0 18px 50px rgba(0,0,0,.5); }
+  50%      { box-shadow: 0 0 0 16px rgba(255,240,214,.18), 0 18px 60px rgba(0,0,0,.55); }
+}
+.fl-memo-sub { margin: 0; color: #e3cfae; font-size: 14.5px; letter-spacing: 2px; line-height: 2; }
+
+/* ---------- 桌面端适配 ---------- */
+@media (min-width: 700px) {
+  .fl-env { width: 300px; height: 200px; }
+  .fl-seal { width: 52px; height: 52px; margin: -30px 0 0 -26px; font-size: 23px; }
+  .fl-paper-peek { width: 230px; margin-left: -115px; }
+  .fl-line { font-size: 17.5px; }
+  .fl-memo-photo { width: 280px; height: 280px; }
+  .fl-memo-title { font-size: 36px; }
+}
+
+/* ---------- 无障碍 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .fl-env, .fl-dust i, .fl-petals i, .fl-hearts i, .fl-bokeh i { animation: none !important; }
+  .fl-env-wrap, .fl-reading, .fl-paper-peek { transition: none !important; }
+}

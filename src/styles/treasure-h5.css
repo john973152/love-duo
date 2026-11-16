@@ -1,0 +1,224 @@
+/**
+ * 秘密房间（H5 原生版）样式
+ * 竖屏优先：手机铺满宽度、桌面以竖版卡片呈现；所有热区远大于 44px 触控标准。
+ */
+
+.treasure-h5 .room-viewport {
+  position: relative;
+  width: min(100%, 440px);
+  margin: 0 auto;
+  background: #F6E8D8;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 32px rgba(120, 80, 60, .16);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.treasure-h5 svg.room-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* 镜头推进 */
+#t-scene { transition: transform .85s cubic-bezier(.22, .9, .3, 1); }
+
+/* 返回全景提示 */
+.zoom-back {
+  position: absolute;
+  top: 10px; left: 50%;
+  transform: translateX(-50%) translateY(-56px);
+  padding: 6px 14px;
+  border-radius: 99px;
+  background: rgba(74, 50, 34, .72);
+  color: #FFF4E4;
+  font-size: 12px;
+  pointer-events: none;
+  transition: transform .4s;
+  z-index: 2;
+}
+.room-viewport.zoomed .zoom-back { transform: translateX(-50%) translateY(0); }
+
+/* ---------- 可点物体通用反馈 ---------- */
+.treasure-h5 [data-id], .treasure-h5 .t-book { cursor: pointer; }
+
+/* 待办物体的提示呼吸光 */
+.treasure-h5 .hint { animation: hint-pulse 1.6s ease-in-out infinite; }
+@keyframes hint-pulse {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(255, 216, 102, 0)); }
+  50% { filter: drop-shadow(0 0 8px rgba(255, 216, 102, .95)) drop-shadow(0 0 2px rgba(255, 216, 102, .8)); }
+}
+
+/* 摇头拒绝 */
+.treasure-h5 .shake { animation: obj-shake .45s; }
+@keyframes obj-shake {
+  0%, 100% { translate: 0 0; }
+  25% { translate: -4px 0; } 50% { translate: 4px 0; } 75% { translate: -3px 0; }
+}
+
+/* 玩偶被翻找 */
+.treasure-h5 .wiggle { animation: doll-wiggle .6s ease-in-out; transform-origin: 227px 404px; }
+@keyframes doll-wiggle {
+  0%, 100% { rotate: 0deg; } 30% { rotate: -7deg; } 60% { rotate: 6deg; }
+}
+
+/* ---------- 台灯 ---------- */
+.treasure-h5 .lamp-glow {
+  opacity: 0; transform-origin: 143px 312px;
+  transform: scale(.4); transition: opacity 1.1s, transform 1.1s;
+}
+.treasure-h5 .lamp-glow.on { opacity: 1; transform: scale(1); }
+
+/* ---------- 纸条 / 硬币 / 信封 / 暗格：显示切换 ---------- */
+.treasure-h5 [data-id="clue_lamp"],
+.treasure-h5 [data-id="clue_drawer"],
+.treasure-h5 .shelf-slot,
+.treasure-h5 [data-id="envelope"] {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition: opacity .7s, transform .7s;
+}
+.treasure-h5 [data-id="clue_lamp"].revealed,
+.treasure-h5 [data-id="clue_drawer"].revealed,
+.treasure-h5 .shelf-slot.revealed,
+.treasure-h5 [data-id="envelope"].revealed {
+  opacity: 1; pointer-events: auto; transform: translateY(0);
+}
+
+/* 信封拆开 */
+.treasure-h5 [data-id="envelope"] .env-flap { transition: transform .5s; transform-origin: 269px 410px; }
+.treasure-h5 [data-id="envelope"].opened .env-flap { transform: rotate(180deg) scale(0); opacity: 0; }
+
+/* 抽屉滑开 */
+.treasure-h5 .drawer-front { transition: transform .8s cubic-bezier(.34, 1.3, .64, 1); }
+.treasure-h5 .drawer-front.open { transform: translateX(24px); }
+
+/* ---------- 书架 ---------- */
+.treasure-h5 .t-book.selected { filter: drop-shadow(0 0 6px #FFD866); translate: 0 -5px; }
+.treasure-h5 .t-book.solved-book { animation: solved-glow 1.2s ease-in-out 2; }
+@keyframes solved-glow {
+  0%, 100% { filter: none; } 50% { filter: drop-shadow(0 0 7px #FFD866); }
+}
+
+/* ---------- 地毯、暗门与宝箱 ---------- */
+.treasure-h5 .rug { transition: opacity .9s, transform .9s; transform-origin: 196px 508px; }
+.treasure-h5 [data-id="rug"].lifted { pointer-events: none; }
+.treasure-h5 [data-id="rug"].lifted .rug { opacity: 0; transform: translate(-30px, -34px) rotate(-8deg); }
+
+.treasure-h5 .trapdoor { opacity: 0; transition: opacity .8s .25s; }
+.treasure-h5 .trapdoor.revealed { opacity: 1; }
+
+/* 弹窗内输入框无提示抖动（密码错误时用） */
+.u-input.shake { animation: obj-shake .45s; }
+
+.treasure-h5 .chest { transform: translateY(14px); transition: transform .9s cubic-bezier(.34, 1.3, .64, 1); }
+.treasure-h5 .chest.risen { transform: translateY(0); }
+.treasure-h5 .chest-glow { opacity: 0; transition: opacity 1s .3s; }
+.treasure-h5 .chest.risen .chest-glow, .treasure-h5 .chest.opening .chest-glow { opacity: 1; }
+
+.treasure-h5 .chest-lid {
+  transform-origin: 196px 470px;
+  transition: transform 1.1s cubic-bezier(.5, -.2, .3, 1.3);
+}
+.treasure-h5 .chest.opening .chest-lid { transform: rotate(-78deg); }
+.treasure-h5 .chest.opening .chest-glow-wrap { opacity: 1; }
+
+/* ---------- 照片翻面卡片（弹窗内） ---------- */
+.ph-flip { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.ph-card {
+  width: min(78vw, 250px); aspect-ratio: 4 / 3;
+  perspective: 900px; cursor: pointer;
+}
+.ph-card .ph-face {
+  position: absolute; inset: 0;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: 10px; overflow: hidden;
+  transition: transform .8s cubic-bezier(.4, .1, .2, 1);
+  box-shadow: 0 6px 20px rgba(120, 80, 60, .22);
+}
+.ph-card { position: relative; }
+.ph-card .ph-front {
+  background: #FFFDF6; border: 6px solid #FFFDF6; outline: 1.5px solid #E8C79E;
+  transform: rotateY(0);
+}
+.ph-card .ph-front img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ph-card .ph-back {
+  background: linear-gradient(160deg, #FFF8EC, #FFEDD8);
+  border: 6px solid #FFFDF6; outline: 1.5px solid #E8C79E;
+  display: flex; align-items: center; justify-content: center;
+  padding: 10px; transform: rotateY(180deg);
+}
+.ph-card .ph-back p { font-size: 13.5px; line-height: 1.9; text-align: center; color: #4A3222; }
+.ph-card.flipped .ph-front { transform: rotateY(180deg); }
+.ph-card.flipped .ph-back { transform: rotateY(0deg); }
+.ph-tip { font-size: 12px; color: #B98A5F; }
+
+/* ---------- 道具 / 线索栏 ---------- */
+.u-inventory {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  justify-content: center;
+  margin-top: 14px; min-height: 32px;
+}
+.u-chip {
+  display: inline-flex; align-items: center;
+  padding: 6px 14px; border-radius: 99px;
+  background: rgba(255, 255, 255, .9);
+  border: 1.5px solid #F2A48D;
+  color: #8A6040; font-size: 13px;
+  animation: chip-pop .4s cubic-bezier(.34, 1.56, .64, 1);
+}
+@keyframes chip-pop { from { transform: scale(.6); opacity: 0 } to { transform: scale(1); opacity: 1 } }
+
+/* ---------- 弹窗内元素（沿用统一设计语言） ---------- */
+.u-modal-line { line-height: 1.9; font-size: 14px; margin: 4px 0; }
+.u-modal-question { margin: 12px 0; font-weight: 700; font-size: 15px; color: #B56576; text-align: center; }
+.u-input {
+  width: 100%; max-width: 280px;
+  padding: 11px 14px;
+  border: 2px solid #F2C4A0; border-radius: 12px;
+  font-size: 15px; text-align: center; outline: none;
+  background: #FFFDF6; color: #4A3222;
+}
+.u-input:focus { border-color: #F2A48D; box-shadow: 0 0 0 3px rgba(242, 164, 141, .18); }
+.u-input-pwd { letter-spacing: 8px; font-size: 20px; }
+.u-feedback { min-height: 20px; margin-top: 10px; font-size: 13px; color: #8A6040; text-align: center; }
+.u-feedback.bad { color: #E0705A; }
+.u-clue-line { line-height: 2; font-size: 15px; text-align: center; }
+.u-clue-line b { color: #E0885A; font-size: 18px; }
+
+.modal-actions .btn-ghost { background: #FFF4E4; color: #B56576; border: 1.5px solid #F2C4A0; }
+
+/* ---------- 手机端 ---------- */
+@media (max-width: 430px) {
+  .treasure-h5 .room-viewport { border-radius: 12px; }
+  .u-chip { font-size: 12px; padding: 5px 11px; }
+}
+
+/* 环境动效 */
+.bulb { animation: twinkle 2.4s ease-in-out infinite; }
+.bulb.b3, .bulb.b5 { animation-delay: .8s; }
+.bulb.b2, .bulb.b4 { animation-delay: 1.5s; }
+@keyframes twinkle { 0%, 100% { opacity: 1 } 50% { opacity: .45 } }
+.star { animation: twinkle 3.2s ease-in-out infinite; }
+.star.s2, .star.s5 { animation-delay: 1.1s; }
+.star.s3, .star.s6 { animation-delay: 2s; }
+.dust { animation: dust-float 7s ease-in-out infinite; }
+.dust.d2 { animation-delay: 2.2s; } .dust.d3 { animation-delay: 4.1s; } .dust.d4 { animation-delay: 5.3s; }
+@keyframes dust-float {
+  0%, 100% { transform: translateY(0); opacity: .5 }
+  50% { transform: translateY(-14px); opacity: .95 }
+}
+.cat-tail { transform-origin: 274px 500px; animation: tail-wag 3.4s ease-in-out infinite; }
+@keyframes tail-wag { 0%, 100% { rotate: 0deg } 50% { rotate: 10deg } }
+.curtain { transform-origin: 243px 42px; animation: curtain-sway 5.5s ease-in-out infinite; }
+@keyframes curtain-sway { 0%, 100% { rotate: 0deg } 50% { rotate: 1.6deg } }
+
+/* 减少动态效果偏好 */
+@media (prefers-reduced-motion: reduce) {
+  #t-scene, .ph-card .ph-face, .chest-lid, .rug, .trapdoor { transition: none; }
+  .treasure-h5 .hint, .bulb, .star, .dust, .cat-tail, .curtain { animation: none; }
+  .u-chip { animation: none; }
+}

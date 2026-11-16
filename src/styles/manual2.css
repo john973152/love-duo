@@ -1,0 +1,153 @@
+/* ============ 说明书 V2.0：每页专属动画 ============ */
+.book-page.v2{min-height:400px;overflow:hidden;justify-content:flex-start}
+.page-t{white-space:pre-line;text-align:left}
+.page-h::after{content:'';display:block;width:34px;height:3px;border-radius:2px;
+  background:var(--c-gradient);margin-top:8px;animation:growBar .5s ease}
+@keyframes growBar{from{width:0}}
+
+/* -- 封面 -- */
+.cover-float{position:absolute;inset:0;pointer-events:none}
+.cover-float .cf{position:absolute;font-size:18px;animation:coverFloat 3.4s ease-in-out infinite}
+.cover-float .h1{left:14%;top:16%}
+.cover-float .h2{right:14%;top:24%;animation-delay:.8s}
+.cover-float .h3{right:26%;top:8%;animation-delay:1.6s;font-size:14px}
+@keyframes coverFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-12px) rotate(10deg)}}
+.cover-edge{position:absolute;left:0;top:0;bottom:0;width:10px;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,.35) 0 6px,transparent 6px 12px)}
+
+/* -- P1 产品名称 -- */
+.art{margin:6px 0 14px}
+.art-name{position:relative;text-align:center;padding:6px 0 2px}
+.an-avatar{font-size:58px;animation:bob 1.8s ease-in-out infinite;
+  filter:drop-shadow(0 6px 10px rgba(232,61,50,.22))}
+.an-badge{display:inline-block;margin-top:8px;padding:4px 14px;border-radius:999px;
+  background:var(--c-gradient);color:#fff;font-size:13px;font-weight:800;letter-spacing:1px;
+  box-shadow:0 4px 12px rgba(232,61,50,.3)}
+.an-tag{font-size:12px;color:var(--c-text-light);margin-top:8px}
+.an-heart{position:absolute;font-size:15px;animation:heartUp 2.6s ease-in-out infinite}
+.an-heart.h1{left:18%;top:30%}
+.an-heart.h2{right:20%;top:52%;animation-delay:.9s}
+.an-heart.h3{left:26%;top:66%;animation-delay:1.7s;font-size:12px}
+@keyframes heartUp{0%{opacity:0;transform:translateY(6px) scale(.6)}
+  30%{opacity:1}100%{opacity:0;transform:translateY(-34px) scale(1.15)}}
+
+/* -- P2 产品参数 -- */
+.art-params{border:1.5px solid rgba(255,212,90,.8);border-radius:12px;overflow:hidden;
+  background:linear-gradient(170deg,#FFFDF8,#FFF7E9)}
+.pr-row{display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:10px 14px;font-size:13px;border-bottom:1px dashed rgba(255,212,90,.9);
+  opacity:0;animation:rowIn .45s ease forwards}
+.pr-row:last-child{border-bottom:none}
+.pr-row span{color:var(--c-text-light);flex-shrink:0}
+.pr-row b{color:var(--c-text);text-align:right;font-size:13px}
+@keyframes rowIn{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
+
+/* -- P3 产品功能 -- */
+.art-features{display:flex;flex-wrap:wrap;gap:9px}
+.ft-chip{padding:9px 14px;border-radius:999px;background:#FFF1F4;color:var(--c-primary);
+  font-size:14px;font-weight:700;box-shadow:0 3px 8px rgba(232,61,50,.12);
+  opacity:0;animation:chipPop .45s cubic-bezier(.34,1.56,.64,1) forwards}
+@keyframes chipPop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+.ft-more{width:100%;font-size:12px;color:var(--c-text-light);text-align:right;
+  opacity:0;animation:rowIn .5s ease forwards}
+
+/* -- P4 使用方法：长按亲亲开机 -- */
+.art-kiss{text-align:center;position:relative;padding:4px 0}
+.ka-btn{position:relative;z-index:2;width:92px;height:92px;border-radius:50%;font-size:42px;
+  background:linear-gradient(160deg,#FFF1F0,#FFE4E0);border:none;
+  box-shadow:0 8px 22px rgba(232,61,50,.25),inset 0 -4px 0 rgba(0,0,0,.05);
+  animation:bob 1.6s ease-in-out infinite;transition:transform .15s}
+.ka-btn.holding{animation:none;transform:scale(.92)}
+.ka-ring{position:absolute;left:50%;top:46px;transform:translate(-50%,-50%);z-index:1;
+  width:112px;height:112px;border-radius:50%;pointer-events:none}
+.ka-ring i{display:block;width:100%;height:100%;border-radius:50%;
+  background:conic-gradient(var(--c-primary) var(--p,0%),transparent 0);
+  -webkit-mask:radial-gradient(farthest-side,transparent 86%,#000 88%);
+          mask:radial-gradient(farthest-side,transparent 86%,#000 88%)}
+.ka-tip{font-size:12px;color:var(--c-text-light);margin-top:14px;animation:pulse 1.6s infinite}
+.art-kiss.on .ka-couple{font-size:44px;animation:bob 1.2s ease-in-out infinite}
+.ka-status{margin-top:12px;font-size:13px;font-weight:700;color:#2E7D5B}
+.ka-bubbles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.ka-bubbles i{position:absolute;bottom:0;font-style:normal;font-size:16px;
+  animation:heartUp 2.4s ease-in-out infinite;opacity:0}
+.ka-bubbles i:nth-child(1){left:12%;animation-delay:0s}
+.ka-bubbles i:nth-child(2){left:30%;animation-delay:.5s}
+.ka-bubbles i:nth-child(3){left:48%;animation-delay:1s}
+.ka-bubbles i:nth-child(4){left:64%;animation-delay:1.4s}
+.ka-bubbles i:nth-child(5){left:80%;animation-delay:.8s}
+.ka-bubbles i:nth-child(6){left:90%;animation-delay:1.8s}
+
+/* -- P5 注意事项 -- */
+.art-warning{position:relative;text-align:center;padding:2px 0}
+.wa-icon{font-size:44px;display:inline-block;animation:shake 1.1s ease-in-out infinite}
+.wa-scan{height:3px;border-radius:2px;margin:12px auto 8px;width:70%;
+  background:linear-gradient(90deg,transparent,#FFB347,transparent);
+  animation:scanMove 1.8s ease-in-out infinite}
+@keyframes scanMove{0%{transform:translateX(-40%);opacity:.4}50%{opacity:1}100%{transform:translateX(40%);opacity:.4}}
+.wa-glitch{display:inline-block;font-size:12px;color:#A5642B;background:#FFF6EC;
+  padding:4px 12px;border-radius:999px;animation:pulse 1.4s infinite}
+
+/* -- P6 保修政策 -- */
+.art-warranty{position:relative;text-align:center;padding:2px 0 4px}
+.we-shield{font-size:44px;animation:bob 2s ease-in-out infinite;
+  filter:drop-shadow(0 5px 8px rgba(232,61,50,.2))}
+.we-bar{height:8px;border-radius:4px;background:#FFE3C2;overflow:hidden;margin:12px 8% 6px}
+.we-bar i{display:block;height:100%;width:40%;border-radius:4px;
+  background:linear-gradient(90deg,#FFB347,#E83D32);animation:barLoop 2.2s ease-in-out infinite}
+@keyframes barLoop{0%{transform:translateX(-110%)}100%{transform:translateX(290%)}}
+.we-inf{position:absolute;right:6%;top:2px;font-size:26px;font-weight:900;color:var(--c-primary);
+  animation:spinInf 3.2s linear infinite}
+@keyframes spinInf{0%,100%{transform:rotate(-8deg) scale(1)}50%{transform:rotate(8deg) scale(1.15)}}
+
+/* -- P7 售后服务 -- */
+.art-service{position:relative;text-align:center;padding:4px 0}
+.se-headset{font-size:44px;animation:bob 1.9s ease-in-out infinite}
+.se-stamp{display:inline-block;margin-top:10px;padding:8px 18px;border:2.5px solid #E83D32;
+  color:#E83D32;border-radius:10px;font-size:15px;font-weight:900;letter-spacing:3px;
+  line-height:1.5;transform:rotate(-8deg);opacity:.85;animation:stampIn .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes stampIn{from{transform:rotate(-8deg) scale(2.2);opacity:0}to{transform:rotate(-8deg) scale(1);opacity:.85}}
+
+/* -- P8 特殊条款 -- */
+.art-seal{position:relative;text-align:center;padding:2px 0}
+.sy-lock{font-size:44px;animation:bob 2.1s ease-in-out infinite}
+.sy-code{font-size:12px;color:var(--c-text-light);margin-top:8px;letter-spacing:1px}
+.sy-stamp{display:inline-block;margin-top:8px;padding:6px 16px;border:2.5px solid #3BB273;
+  color:#3BB273;border-radius:10px;font-size:15px;font-weight:900;letter-spacing:3px;
+  transform:rotate(6deg);opacity:.85;animation:stampIn .6s cubic-bezier(.34,1.56,.64,1) .2s backwards}
+
+/* -- 最后一页：指纹确认 -- */
+.fp-btn{position:relative;display:block;margin:14px auto 0;width:110px;height:110px;
+  background:linear-gradient(160deg,#FFF6E8,#FFEFD8);border:2px solid var(--c-accent);
+  border-radius:26px;box-shadow:0 8px 22px rgba(232,61,50,.2);transition:transform .15s}
+.fp-btn.holding{transform:scale(.94)}
+.fp-emoji{position:absolute;left:50%;top:50%;width:56px;height:56px;transform:translate(-50%,-50%);
+  color:var(--c-primary);animation:pulse 1.8s infinite}
+.fp-ring{position:absolute;inset:-8px;border-radius:32px;pointer-events:none}
+.fp-ring b{display:block;width:100%;height:100%;border-radius:32px;
+  background:conic-gradient(var(--c-primary) var(--p,0%),transparent 0);
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 5px));
+          mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 5px))}
+.fp-tip{text-align:center;font-size:12px;color:var(--c-text-light);margin-top:10px;animation:pulse 1.6s infinite}
+
+/* -- 收货绑定动画 -- */
+.bd-card{position:relative;text-align:center;padding:26px 16px;border-radius:18px;
+  background:linear-gradient(160deg,#FFFDF8,#FFF3E3);border:1.5px solid rgba(255,212,90,.85);
+  box-shadow:0 12px 30px rgba(232,61,50,.16);overflow:hidden}
+.bd-ring{position:absolute;left:50%;top:60px;width:150px;height:150px;transform:translate(-50%,-50%);
+  border-radius:50%;border:2px dashed rgba(232,61,50,.3);animation:spinSlow 8s linear infinite}
+@keyframes spinSlow{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.bd-boy{position:relative;font-size:62px;animation:bob 1.5s ease-in-out infinite;z-index:1}
+.bd-hearts{position:relative;height:34px;pointer-events:none}
+.bd-hearts i{position:absolute;font-style:normal;font-size:16px;opacity:0;
+  animation:heartUp 2.4s ease-in-out infinite}
+.bd-hearts i:nth-child(1){left:8%}
+.bd-hearts i:nth-child(2){left:24%;animation-delay:.4s}
+.bd-hearts i:nth-child(3){left:40%;animation-delay:.9s}
+.bd-hearts i:nth-child(4){left:56%;animation-delay:.2s}
+.bd-hearts i:nth-child(5){left:70%;animation-delay:1.3s}
+.bd-hearts i:nth-child(6){left:84%;animation-delay:.7s}
+.bd-hearts i:nth-child(7){left:48%;animation-delay:1.7s;font-size:12px}
+.bd-lines{margin-top:10px}
+.bd-lines p{font-size:14px;color:var(--c-text);padding:6px 0;text-align:left;
+  border-bottom:1px dashed rgba(255,212,90,.9)}
+.bd-lines p:last-child{border-bottom:none}

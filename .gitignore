@@ -1,0 +1,14 @@
+# 依赖与构建产物
+node_modules/
+dist/
+
+# Vite 临时文件
+vite.config.js.timestamp-*
+vite.config.zip
+*.local
+.vite/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini

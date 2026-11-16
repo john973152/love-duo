@@ -1,0 +1,138 @@
+
+/* ============ 认证卡 ============ */
+.vip-cert{position:relative;overflow:hidden;background:linear-gradient(135deg,#FFF6E0,#FFE9C7);
+  border:2px solid var(--c-accent);border-radius:18px;padding:22px 18px;text-align:center;
+  box-shadow:0 10px 30px rgba(232,61,50,.18);animation:popIn .4s ease}
+.cert-shine{position:absolute;top:-60%;left:-30%;width:60%;height:200%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.8),transparent);
+  transform:rotate(18deg);animation:certShine 2.6s ease-in-out infinite}
+@keyframes certShine{0%{left:-60%}60%,100%{left:130%}}
+.cert-head{font-size:18px;font-weight:900;color:#B4640C;margin-bottom:14px}
+.cert-row{font-size:14px;color:#7A4A18;padding:6px 0;border-bottom:1px dashed rgba(180,100,12,.25)}
+.cert-row:last-of-type{border:none}
+.cert-seal{display:inline-block;margin-top:16px;padding:6px 16px;border:2px solid #E83D32;
+  color:#E83D32;border-radius:6px;font-size:12px;font-weight:900;letter-spacing:2px;
+  transform:rotate(-6deg);opacity:.85}
+
+/* ============ 拼图 ============ */
+.puzzle-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
+.ptab{width:30px;height:30px;border-radius:50%;background:var(--c-card);display:flex;
+  align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--c-text-light);
+  box-shadow:var(--shadow);position:relative}
+.ptab.on{background:var(--c-gradient);color:#fff}
+.ptab.done::after{content:'✓';position:absolute;top:-4px;right:-6px;font-size:11px;color:#3BB273;
+  font-weight:900}
+.puzzle-board{position:relative;display:grid;grid-template-columns:repeat(var(--n),1fr);
+  gap:2px;background:var(--c-accent);border-radius:12px;overflow:hidden;
+  aspect-ratio:1;box-shadow:var(--shadow);touch-action:manipulation}
+.puzzle-cell{position:relative;background-repeat:no-repeat;border:none;padding:0;
+  -webkit-tap-highlight-color:transparent;transition:transform .15s,box-shadow .15s}
+.puzzle-cell::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+.puzzle-cell.sel{box-shadow:0 0 0 3px var(--c-primary);z-index:2;transform:scale(.94)}
+.puzzle-cell.pop{transform:scale(.92)}
+.puzzle-cell.solved{box-shadow:none}
+.puzzle-board.previewing::after{content:'';position:absolute;inset:0;z-index:5;
+  background-image:var(--preview-img);background-size:cover;background-position:center;
+  animation:fadeIn .25s}
+.puzzle-hint{text-align:center;font-size:12px;color:var(--c-text-light);margin:10px 0 12px}
+.puzzle-tools{display:flex;gap:10px;justify-content:center}
+.puzzle-tools .btn{flex:1;padding:10px;font-size:14px;min-height:44px}
+.puzzle-fullwrap{max-height:46vh;overflow:hidden;border-radius:10px}
+.puzzle-fullwrap img{width:100%;display:block;border-radius:10px}
+
+/* ============ 寻宝房间 ============ */
+/* 寻宝房间样式已迁移至 games.css（动画插画版），此处保留 found-list 等通用样式 */
+.found-list{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
+.fl-item{font-size:12px;padding:5px 12px;border-radius:999px;background:var(--c-card);
+  color:var(--c-text-light);box-shadow:var(--shadow)}
+.fl-item.on{background:#EAF9F0;color:#2E7D5B;font-weight:700}
+.treasure-photo{max-height:40vh;overflow:hidden;border-radius:10px}
+.treasure-photo img{width:100%;display:block}
+.voice-box{display:flex;align-items:center;gap:10px;justify-content:center;padding:10px;
+  background:var(--c-bg);border-radius:12px}
+.voice-play{width:44px;height:44px;border-radius:50%;background:var(--c-gradient);color:#fff;
+  font-size:16px;flex-shrink:0}
+
+/* ============ 说明书 ============ */
+.book{perspective:900px;margin-bottom:16px}
+.book-page{position:relative;min-height:290px;border-radius:14px;padding:24px 20px;
+  background:linear-gradient(160deg,#FFFDF8,#FFF6E8);box-shadow:0 10px 26px rgba(232,61,50,.16);
+  border:1px solid rgba(255,212,90,.7);transition:transform .18s ease,opacity .18s ease;
+  display:flex;flex-direction:column;justify-content:center}
+.book-page.flipping{transform:rotateY(-8deg) scale(.97);opacity:.6}
+.book-page.cover{background:linear-gradient(160deg,#E83D32,#FF8A38);color:#fff;align-items:center;text-align:center}
+.cover-avatar{font-size:52px;margin-bottom:10px;animation:bob 2.4s infinite}
+.cover-title{font-size:19px;font-weight:900;line-height:1.5}
+.cover-sub{font-size:13px;opacity:.9;margin-top:8px}
+.page-no{position:absolute;top:10px;right:14px;font-size:11px;color:var(--c-text-light)}
+.page-h{font-size:17px;font-weight:800;color:var(--c-primary);margin-bottom:10px}
+.page-t{font-size:15px;line-height:1.9;color:var(--c-text)}
+.book-nav{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.book-nav .btn{padding:8px 14px;font-size:14px;min-height:44px;flex:1}
+.book-dots{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;max-width:80px}
+.book-dots i{width:5px;height:5px;border-radius:50%;background:var(--c-accent)}
+.book-dots i.on{background:var(--c-primary);transform:scale(1.4)}
+.heart-anim-wrap{text-align:center;padding-top:20px}
+.heart-boy{font-size:64px;animation:bob 1.4s infinite}
+.heart-fly{font-size:26px;margin-top:10px;animation:heartFly 2s ease-in-out infinite}
+@keyframes heartFly{0%{transform:translateY(0);opacity:0}30%{opacity:1}100%{transform:translateY(-60px);opacity:0}}
+
+/* ============ 时间轴 ============ */
+.timeline{position:relative;padding-left:34px;margin:10px 0 20px}
+.timeline::before{content:'';position:absolute;left:13px;top:10px;bottom:10px;width:2px;
+  background:linear-gradient(180deg,var(--c-secondary),var(--c-accent));border-radius:2px}
+.tl-node{position:relative;margin-bottom:16px;cursor:pointer}
+.tl-dot{position:absolute;left:-34px;top:14px;width:28px;height:28px;border-radius:50%;
+  background:#fff;border:2px solid var(--c-secondary);display:flex;align-items:center;
+  justify-content:center;font-size:13px;box-shadow:var(--shadow);transition:all .3s}
+.tl-node.viewed .tl-dot{border-color:var(--c-primary);background:#FFF0F2}
+.tl-card{background:var(--c-card);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow);
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;transition:transform .2s}
+.tl-card:active{transform:scale(.985)}
+.tl-date{font-size:11px;color:var(--c-text-light)}
+.tl-title{font-size:15px;font-weight:700;flex:1}
+.tl-viewed{font-size:10px;color:var(--c-primary);background:#FFF0F2;padding:2px 8px;border-radius:999px}
+.tl-actions{display:flex;flex-direction:column;gap:10px}
+.tl-photo{max-height:38vh;overflow:hidden;border-radius:10px;margin-bottom:10px}
+.tl-photo img{width:100%;display:block}
+.tl-text{font-size:14px;line-height:1.9;text-align:left;white-space:pre-line;
+  font-family:"Kaiti SC",KaiTi,cursive;color:var(--c-primary)}
+.future-frame{aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;
+  border:2px dashed var(--c-accent);border-radius:10px;font-size:34px;color:var(--c-text-light);
+  margin-bottom:10px}
+.voice-big{text-align:center;padding:10px 0}
+.voice-play-big{width:72px;height:72px;border-radius:50%;background:var(--c-gradient);color:#fff;
+  font-size:26px;box-shadow:0 6px 20px rgba(232,61,50,.35);animation:glow 2s infinite}
+.voice-tip{font-size:12px;color:var(--c-text-light);margin-top:10px}
+
+/* ============ 未来订单 ============ */
+.wish-list{display:flex;flex-direction:column;gap:10px}
+.wish{display:flex;align-items:center;gap:10px;padding:14px;background:var(--c-card);
+  border-radius:12px;box-shadow:var(--shadow);border:2px solid transparent;text-align:left;
+  transition:all .2s;min-height:54px}
+.wish:active{transform:scale(.98)}
+.wish.on{border-color:var(--c-primary);background:#FFF6F4}
+.wish-box{width:22px;height:22px;border-radius:6px;border:2px solid var(--c-accent);
+  display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;flex-shrink:0}
+.wish.on .wish-box{background:var(--c-primary);border-color:var(--c-primary)}
+.wish-text{font-size:15px;line-height:1.5}
+.btn[disabled]{opacity:.45}
+.order-card{position:relative;background:linear-gradient(170deg,#FFFDF8,#FFF3E3);
+  border-radius:16px;padding:22px 18px;box-shadow:0 12px 30px rgba(232,61,50,.18);
+  border:1px solid rgba(255,212,90,.8);overflow:hidden;text-align:left}
+.order-head{font-size:15px;font-weight:900;color:var(--c-primary);letter-spacing:1px;
+  border-bottom:2px dashed rgba(232,61,50,.25);padding-bottom:10px;margin-bottom:6px}
+.order-no{font-size:11px;color:var(--c-text-light);margin-bottom:14px}
+.order-items{margin:0 0 14px}
+.order-items li{font-size:15px;padding:8px 0 8px 24px;position:relative;line-height:1.5;
+  border-bottom:1px dashed rgba(255,212,90,.9)}
+.order-items li::before{content:'🌷';position:absolute;left:0;font-size:13px}
+.order-meta p{font-size:12px;color:var(--c-text-light);padding:3px 0}
+.order-status{color:var(--c-primary)!important;font-weight:800;font-size:13px!important}
+.order-seal{position:absolute;right:-10px;bottom:-10px;font-size:70px;opacity:.12}
+
+/* 闪光 */
+.sparkle-burst{position:fixed;transform:translate(-50%,-50%);font-size:22px;
+  animation:sparkleUp .7s ease-out forwards;pointer-events:none;z-index:95}
+@keyframes sparkleUp{0%{opacity:1;transform:translate(-50%,-50%) scale(.6)}
+  100%{opacity:0;transform:translate(-50%,-140%) scale(1.4)}}

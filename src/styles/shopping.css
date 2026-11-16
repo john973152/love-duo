@@ -1,0 +1,64 @@
+/* ============ 电商促销风格组件（前半部分） ============ */
+
+/* 首页顶栏 */
+.shop-topbar{display:flex;align-items:center;gap:10px;padding:12px 0}
+.shop-logo{display:flex;align-items:center;gap:6px;font-weight:900;font-size:20px;
+  color:var(--c-primary);font-style:italic;letter-spacing:-.5px}
+.shop-logo .duo{color:var(--c-secondary)}
+.shop-search{flex:1;display:flex;align-items:center;gap:6px;background:#fff;border:2px solid var(--c-primary);
+  border-radius:999px;padding:7px 12px;font-size:13px}
+.shop-search input{border:none;outline:none;flex:1;min-width:0;background:none;color:var(--c-text)}
+.shop-cs{width:42px;height:42px;border-radius:50%;background:var(--c-accent);
+  display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;
+  box-shadow:var(--shadow);animation:bob 2s ease-in-out infinite}
+
+/* Banner */
+.promo-banner{position:relative;margin:10px 0;border-radius:16px;overflow:hidden;
+  background:var(--c-gradient);color:#fff;padding:26px 18px;text-align:center;box-shadow:var(--shadow)}
+.promo-banner h1{font-size:26px;font-weight:900;text-shadow:0 2px 6px rgba(0,0,0,.15)}
+.promo-banner .sub{margin-top:6px;font-size:14px;opacity:.95}
+.promo-tag{position:absolute;top:10px;left:-6px;background:var(--c-accent);color:#7a4a00;
+  font-size:11px;font-weight:700;padding:4px 12px;border-radius:0 8px 8px 0;
+  box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.promo-banner .countdown{margin-top:12px;display:inline-block;background:rgba(0,0,0,.22);
+  border-radius:999px;padding:5px 14px;font-size:13px;font-variant-numeric:tabular-nums}
+
+/* VIP 公告卡片 */
+.vip-card{margin:14px 0;padding:16px;border-radius:var(--radius);background:var(--c-card);
+  box-shadow:var(--shadow);border:1.5px dashed var(--c-secondary)}
+.vip-card .vip-title{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--c-primary);font-size:16px}
+.vip-card .badge{background:var(--c-gradient);color:#fff;font-size:11px;padding:2px 10px;border-radius:999px}
+.vip-list{margin:10px 0;font-size:13px;color:var(--c-text)}
+.vip-list li{padding:3px 0 3px 22px;position:relative}
+.vip-list li::before{content:'🎁';position:absolute;left:0;font-size:13px}
+.warm-tip{font-size:12px;color:var(--c-text-light);margin-top:8px}
+
+/* 福利进度（章节导航） */
+.stage-nav{margin:16px 0}
+.stage-nav h4{font-size:14px;margin-bottom:10px;color:var(--c-text-light)}
+.stage-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.stage-item{display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 4px;
+  background:var(--c-card);border-radius:12px;box-shadow:var(--shadow);font-size:11px;
+  position:relative;border:1.5px solid transparent;transition:all .3s}
+.stage-item .ico{font-size:24px}
+.stage-item.locked{opacity:.45;filter:grayscale(.6)}
+.stage-item.done{border-color:var(--c-primary)}
+.stage-item.done::after{content:'✓';position:absolute;top:-6px;right:-4px;width:20px;height:20px;
+  border-radius:50%;background:var(--c-primary);color:#fff;font-size:12px;line-height:20px}
+.stage-item.current{border-color:var(--c-secondary);animation:pulse 1.5s infinite}
+
+/* 促销大按钮 */
+.cta-big{display:block;width:100%;margin:18px 0 8px;font-size:20px;letter-spacing:2px;
+  background:linear-gradient(135deg,#FFD45A,#FF8A38);color:#fff;
+  border-radius:999px;padding:15px;font-weight:900;box-shadow:0 6px 18px rgba(255,138,56,.4);
+  animation:glow 1.8s ease-in-out infinite}
+.cta-big:active{transform:scale(.96)}
+
+/* 底部说明 */
+.footer-note{text-align:center;font-size:11px;color:var(--c-text-light);padding:16px 0 8px}
+.footer-note .rule-hidden{display:block;margin-top:4px;font-size:10px;opacity:.7}
+
+/* 游戏页通用标题 */
+.game-title{text-align:center;padding:20px 0 6px;font-size:20px;font-weight:800;color:var(--c-primary)}
+.game-subtitle{text-align:center;font-size:13px;color:var(--c-text-light);margin-bottom:16px}
+.game-wrap{padding-bottom:30px}

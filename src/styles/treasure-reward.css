@@ -1,0 +1,196 @@
+/**
+ * 宝箱终极奖励 · 拼多多风格商品页 / 订单页 / 评价
+ * 由 treasure-reward.js 动态渲染，全屏弹层呈现。
+ */
+
+/* ---------- 全屏弹层 ---------- */
+.rw-mask {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(60, 20, 20, .55);
+  display: flex; justify-content: center;
+  animation: rw-fade .25s;
+}
+@keyframes rw-fade { from { opacity: 0 } to { opacity: 1 } }
+
+.rw-page {
+  position: relative;
+  width: min(100%, 440px);
+  height: 100%;
+  background: #F6F0E8;
+  overflow-y: auto;
+  padding-bottom: 86px;
+  animation: rw-rise .35s cubic-bezier(.22, .9, .3, 1);
+}
+@keyframes rw-rise { from { transform: translateY(28px); opacity: 0 } to { transform: none; opacity: 1 } }
+
+.rw-close {
+  position: absolute; top: 10px; right: 10px; z-index: 5;
+  width: 34px; height: 34px; border-radius: 50%;
+  border: none; background: rgba(0,0,0,.35); color: #fff;
+  font-size: 20px; line-height: 1; cursor: pointer;
+}
+
+/* ---------- 商品详情页 ---------- */
+.rw-gallery {
+  background: linear-gradient(160deg, #FFE3EC, #FFD1DC 60%, #FFC9D6);
+  display: flex; justify-content: center; padding: 26px 0 14px;
+}
+.rw-gallery svg { width: min(70%, 280px); filter: drop-shadow(0 10px 18px rgba(200, 80, 110, .28)); }
+
+.rw-body { padding: 14px 16px 20px; }
+.rw-price-row { display: flex; align-items: baseline; gap: 8px; }
+.rw-price { color: #E83D32; font-size: 30px; font-weight: 800; }
+.rw-price i { font-style: normal; font-size: 17px; }
+.rw-origin { color: #B9A79B; font-size: 13px; }
+.rw-sold { margin-left: auto; color: #B9A79B; font-size: 12px; }
+
+.rw-name { margin: 8px 0 6px; font-size: 17px; line-height: 1.5; color: #3A2A22; }
+.rw-tagline { font-size: 13px; color: #B56576; background: #FFF0F3; border-radius: 8px; padding: 8px 10px; line-height: 1.7; }
+.rw-highlights { margin: 12px 0 0; padding: 12px 14px; list-style: none; background: #fff; border-radius: 10px; }
+.rw-highlights li { font-size: 13px; color: #6B5544; line-height: 2; }
+.rw-highlights li::before { content: '✦ '; color: #F2A48D; }
+.rw-service { margin-top: 10px; font-size: 12px; color: #C9A96B; }
+
+.rw-footer {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  background: #fff; padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; gap: 10px;
+  box-shadow: 0 -4px 14px rgba(120, 60, 60, .08);
+}
+.rw-buy {
+  border: none; border-radius: 99px; cursor: pointer;
+  padding: 13px; font-size: 16px; font-weight: 700; color: #fff;
+  background: linear-gradient(90deg, #FF6034, #E83D32);
+  box-shadow: 0 6px 14px rgba(232, 61, 50, .35);
+}
+.rw-buy:active { transform: scale(.98); }
+.rw-back {
+  border: none; border-radius: 99px; cursor: pointer;
+  padding: 11px; font-size: 14px; color: #9A7B5F; background: #F6E8D8;
+}
+
+/* ---------- 付款方式弹窗 ---------- */
+.rw-pay-tip { text-align: center; font-size: 13px; color: #B56576; margin: 4px 0 8px; }
+.rw-pay-btn { position: relative; display: flex; flex-direction: column; gap: 2px; padding: 11px 14px !important; }
+.rw-pay-desc { font-size: 11.5px; font-weight: 400; opacity: .75; }
+
+/* ---------- 付款成功动画 ---------- */
+.rw-paying { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 78vh; gap: 16px; }
+.rw-check {
+  width: 84px; height: 84px; border-radius: 50%;
+  background: linear-gradient(135deg, #6BCB77, #4CAF6D);
+  display: flex; align-items: center; justify-content: center;
+  animation: rw-pop .5s cubic-bezier(.34, 1.56, .64, 1);
+  box-shadow: 0 10px 26px rgba(76, 175, 109, .4);
+}
+.rw-check i {
+  width: 40px; height: 20px;
+  border-left: 6px solid #fff; border-bottom: 6px solid #fff;
+  transform: rotate(-45deg) translate(1px, -4px);
+}
+@keyframes rw-pop { from { transform: scale(.3); opacity: 0 } to { transform: scale(1); opacity: 1 } }
+.rw-pay-ok { font-size: 21px; font-weight: 800; color: #4CAF6D; }
+.rw-pay-sub { font-size: 13px; color: #9A8B7C; }
+
+/* ---------- 订单页 ---------- */
+.rw-order-head {
+  background: linear-gradient(135deg, #FF6034, #E83D32);
+  color: #fff; padding: 30px 20px 20px; border-radius: 0 0 18px 18px;
+}
+.rw-status { font-size: 19px; font-weight: 800; }
+.rw-eta { margin-top: 6px; font-size: 13px; opacity: .92; }
+
+.rw-card {
+  margin: 12px 14px 0; background: #fff; border-radius: 12px;
+  padding: 12px 14px;
+}
+.rw-mini-art { display: flex; }
+.rw-mini-art svg { width: 72px; }
+.rw-card { display: flex; align-items: center; gap: 12px; }
+.rw-card-info .rw-card-name { font-size: 14.5px; font-weight: 700; color: #3A2A22; line-height: 1.5; }
+.rw-card-info .rw-card-spec { font-size: 12px; color: #B9A79B; margin-top: 4px; }
+.rw-courier { display: block; }
+.rw-courier .rw-row { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; line-height: 2.1; }
+.rw-courier .rw-row span { color: #B9A79B; flex-shrink: 0; }
+.rw-courier .rw-row b { color: #6B5544; font-weight: 600; text-align: right; }
+
+.rw-timeline { display: block; }
+.rw-node { display: flex; gap: 12px; position: relative; padding-bottom: 18px; }
+.rw-node:last-child { padding-bottom: 4px; }
+.rw-node::before {
+  content: ''; position: absolute; left: 5.5px; top: 14px; bottom: -2px;
+  width: 2px; background: #F0E2D2;
+}
+.rw-node:last-child::before { display: none; }
+.rw-dot {
+  width: 13px; height: 13px; border-radius: 50%; flex-shrink: 0; margin-top: 4px;
+  background: #F0E2D2; border: 3px solid #F6F0E8; box-sizing: border-box;
+}
+.rw-node.done .rw-dot { background: #E83D32; }
+.rw-nt { font-size: 13.5px; font-weight: 700; color: #6B5544; }
+.rw-node.done .rw-nt { color: #3A2A22; }
+.rw-nd { font-size: 12px; color: #B9A79B; margin-top: 2px; line-height: 1.6; }
+
+/* ---------- 评价弹窗 ---------- */
+.rw-review-tip { text-align: center; font-size: 13px; color: #B56576; margin: 4px 0 10px; }
+.modal-actions #rw-best {
+  width: 100%;
+  order: -1;
+  font-size: 18px; font-weight: 800;
+  padding: 15px;
+  background: linear-gradient(90deg, #FF6034, #E83D32);
+  color: #fff; border: none;
+  box-shadow: 0 6px 14px rgba(232, 61, 50, .35);
+}
+.modal-actions .rw-other { font-size: 11.5px; padding: 7px 10px; opacity: .7; }
+
+/* ---------- 商品卡从宝箱浮出 ---------- */
+.rw-card-float {
+  position: absolute; left: 50%; bottom: 6%;
+  transform: translateX(-50%);
+  width: min(78%, 250px);
+  border: 3px solid #FFE396; border-radius: 16px;
+  background: linear-gradient(170deg, #FFFDF6, #FFF3E0);
+  box-shadow: 0 14px 34px rgba(160, 90, 40, .35);
+  padding: 12px 14px 10px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  animation: rw-card-up .9s cubic-bezier(.22, 1.2, .3, 1);
+  z-index: 3;
+}
+@keyframes rw-card-up {
+  from { transform: translateX(-50%) translateY(90px) scale(.7); opacity: 0 }
+  to { transform: translateX(-50%) translateY(0) scale(1); opacity: 1 }
+}
+.rc-shine { position: absolute; top: -14px; right: -8px; font-size: 26px; animation: rc-shine 1.4s ease-in-out infinite; }
+@keyframes rc-shine { 0%,100% { transform: rotate(-12deg) scale(1) } 50% { transform: rotate(8deg) scale(1.25) } }
+.rc-reveal { font-size: 13.5px; font-weight: 800; color: #B56576; }
+.rc-reveal.sub { font-size: 11.5px; font-weight: 400; color: #9A8B7C; }
+.rc-art svg { width: 108px; display: block; }
+.rc-name { font-size: 12.5px; font-weight: 700; color: #3A2A22; text-align: center; line-height: 1.4; }
+.rc-tip { font-size: 10.5px; color: #C9A96B; animation: twinkle 1.6s ease-in-out infinite; }
+
+/* ---------- 爱心粒子（宝箱开启） ---------- */
+.rw-heart {
+  position: absolute; bottom: 34%;
+  pointer-events: none; z-index: 2;
+  animation: rw-heart-up 2.6s ease-out forwards;
+  opacity: 0;
+}
+@keyframes rw-heart-up {
+  0% { transform: translateY(0) scale(.5); opacity: 0 }
+  15% { opacity: .95 }
+  100% { transform: translateY(-190px) scale(1.15) rotate(14deg); opacity: 0 }
+}
+
+/* ---------- 房间内"我的订单"入口 ---------- */
+.reward-entry {
+  display: block; width: 100%; margin-top: 14px;
+  border: 2px solid #FFB347; border-radius: 99px;
+  background: #FFF6E8; color: #B56576;
+  font-size: 14px; font-weight: 700; padding: 11px; cursor: pointer;
+  animation: chip-pop .4s cubic-bezier(.34, 1.56, .64, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rw-page, .rw-check, .rw-card-float, .rw-heart, .rc-shine { animation: none; }
+}

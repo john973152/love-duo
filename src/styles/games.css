@@ -1,0 +1,303 @@
+/* ============ 通用游戏 / 动画 ============ */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeOut{to{opacity:0}}
+@keyframes popIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes glow{0%,100%{box-shadow:0 6px 18px rgba(255,138,56,.4)}50%{box-shadow:0 6px 26px rgba(232,61,50,.6)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-3deg)}75%{transform:rotate(3deg)}}
+
+/* 彩带/星星特效 */
+.confetti{position:fixed;top:-10px;z-index:90;pointer-events:none;width:8px;height:14px;animation:confettiFall linear forwards}
+@keyframes confettiFall{to{transform:translateY(105vh) rotate(720deg);opacity:.3}}
+
+/* 敬请期待占位（第二阶段逐个替换为真实游戏） */
+.stage-stub{text-align:center;padding:50px 20px}
+.stage-stub .big-ico{font-size:60px;margin-bottom:14px;animation:bob 2s infinite}
+.stage-stub p{color:var(--c-text-light);margin-bottom:20px}
+
+/* ============ 01 幸运转盘 ============ */
+.wheel-stage{position:relative;width:min(88vw,340px);aspect-ratio:1;margin:8px auto 0}
+.wheel-rotor{position:absolute;inset:0;will-change:transform;
+  filter:drop-shadow(0 8px 22px rgba(232,61,50,.28))}
+.wheel-rotor canvas{width:100%;height:100%;display:block;border-radius:50%}
+.wheel-pointer{position:absolute;top:-16px;left:50%;transform:translateX(-50%);z-index:3;
+  font-size:28px;color:var(--c-primary);filter:drop-shadow(0 3px 4px rgba(0,0,0,.2));
+  animation:bob 1.6s ease-in-out infinite}
+/* 用 inset+margin:auto 居中，transform 专门留给 scale/动画，避免 pulse 覆盖 translate 导致按钮移位 */
+.wheel-center{position:absolute;inset:0;margin:auto;
+  width:26%;aspect-ratio:1;border-radius:50%;background:var(--c-gradient);color:#fff;
+  font-weight:800;font-size:15px;line-height:1.2;z-index:2;
+  box-shadow:0 4px 14px rgba(232,61,50,.45),inset 0 -3px 0 rgba(0,0,0,.12);
+  transition:transform .15s}
+.wheel-center:active{transform:scale(.93)}
+.wheel-center.spinning{animation:pulse .6s infinite}
+.wheel-prize-preview{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:20px}
+.prize-chip{font-size:11px;padding:4px 10px;border-radius:999px;background:var(--c-card);
+  color:var(--c-text);box-shadow:var(--shadow)}
+.prize-chip:first-child,.prize-chip:last-child{background:var(--c-accent);font-weight:700}
+.prize-big{font-size:24px;font-weight:900;color:var(--c-primary);letter-spacing:1px}
+
+/* 答题 */
+.quiz-progress{display:flex;gap:5px;margin-bottom:14px}
+.quiz-progress i{flex:1;height:5px;border-radius:3px;background:var(--c-accent);transition:background .3s}
+.quiz-progress i.on{background:var(--c-primary)}
+.quiz-q{font-size:17px;font-weight:700;line-height:1.6;margin-bottom:16px}
+.quiz-q .idx{color:var(--c-primary)}
+.quiz-opt{display:block;width:100%;text-align:left;padding:14px 16px;margin-bottom:10px;
+  background:var(--c-card);border-radius:12px;font-size:15px;box-shadow:var(--shadow);
+  border:2px solid transparent;transition:all .2s;min-height:52px}
+.quiz-opt:active{transform:scale(.98)}
+.quiz-opt.correct{border-color:#3BB273;background:#F0FBF4}
+.quiz-opt.wrong{border-color:#E83D32;background:#FFF0EE;animation:shake .35s}
+.quiz-opt.disabled{pointer-events:none;opacity:.65}
+.quiz-feedback{margin-top:6px;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.7}
+.quiz-feedback.ok{background:#F0FBF4;color:#2E7D5B}
+.quiz-feedback.err{background:#FFF6EC;color:#A5642B}
+.quiz-note{font-size:12px;color:var(--c-text-light);text-align:center;margin-top:10px}
+
+/* ============ 认证卡 ============ */
+.vip-cert{position:relative;overflow:hidden;background:linear-gradient(135deg,#FFF6E0,#FFE9C7);
+  border:2px solid var(--c-accent);border-radius:18px;padding:22px 18px;text-align:center;
+  box-shadow:0 10px 30px rgba(232,61,50,.18);animation:popIn .4s ease}
+.cert-shine{position:absolute;top:-60%;left:-30%;width:60%;height:200%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.8),transparent);
+  transform:rotate(18deg);animation:certShine 2.6s ease-in-out infinite}
+@keyframes certShine{0%{left:-60%}60%,100%{left:130%}}
+.cert-head{font-size:18px;font-weight:900;color:#B4640C;margin-bottom:14px}
+.cert-row{font-size:14px;color:#7A4A18;padding:6px 0;border-bottom:1px dashed rgba(180,100,12,.25)}
+.cert-row:last-of-type{border:none}
+.cert-seal{display:inline-block;margin-top:16px;padding:6px 16px;border:2px solid #E83D32;
+  color:#E83D32;border-radius:6px;font-size:12px;font-weight:900;letter-spacing:2px;
+  transform:rotate(-6deg);opacity:.85}
+
+/* ============ 拼图 ============ */
+.puzzle-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
+.ptab{width:30px;height:30px;border-radius:50%;background:var(--c-card);display:flex;
+  align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--c-text-light);
+  box-shadow:var(--shadow)}
+.ptab.on{background:var(--c-gradient);color:#fff}
+.ptab.done::after{content:'✓';position:absolute;margin:-22px 0 0 22px;font-size:10px;color:#3BB273}
+.puzzle-board{position:relative;display:grid;grid-template-columns:repeat(var(--n),1fr);
+  gap:2px;background:var(--c-accent);border-radius:12px;overflow:hidden;
+  aspect-ratio:1;box-shadow:var(--shadow);touch-action:manipulation}
+.puzzle-cell{position:relative;background-repeat:no-repeat;border:none;padding:0;
+  -webkit-tap-highlight-color:transparent;transition:transform .15s,box-shadow .15s}
+.puzzle-cell::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+.puzzle-cell.sel{box-shadow:0 0 0 3px var(--c-primary);z-index:2;transform:scale(.94)}
+.puzzle-cell.pop{transform:scale(.92)}
+.puzzle-cell.solved{box-shadow:none}
+.puzzle-board.previewing::after{content:'';position:absolute;inset:0;z-index:5;
+  background-image:var(--preview-img);background-size:cover;animation:fadeIn .25s}
+.puzzle-hint{text-align:center;font-size:12px;color:var(--c-text-light);margin:10px 0 12px}
+.puzzle-tools{display:flex;gap:10px;justify-content:center}
+.puzzle-tools .btn{flex:1;padding:10px;font-size:14px;min-height:44px}
+.puzzle-fullwrap{max-height:46vh;overflow:hidden;border-radius:10px}
+.puzzle-fullwrap img{width:100%;display:block;border-radius:10px}
+
+
+/* ============ 说明书 ============ */
+.book{perspective:900px;margin-bottom:16px}
+.book-page{position:relative;min-height:290px;border-radius:14px;padding:24px 20px;
+  background:linear-gradient(160deg,#FFFDF8,#FFF6E8);box-shadow:0 10px 26px rgba(232,61,50,.16);
+  border:1px solid rgba(255,212,90,.7);transition:transform .18s ease,opacity .18s ease;
+  display:flex;flex-direction:column;justify-content:center}
+.book-page.flipping{transform:rotateY(-8deg) scale(.97);opacity:.6}
+.book-page.cover{background:linear-gradient(160deg,#E83D32,#FF8A38);color:#fff;align-items:center;text-align:center}
+.cover-avatar{font-size:52px;margin-bottom:10px;animation:bob 2.4s infinite}
+.cover-title{font-size:19px;font-weight:900;line-height:1.5}
+.cover-sub{font-size:13px;opacity:.9;margin-top:8px}
+.page-no{position:absolute;top:10px;right:14px;font-size:11px;color:var(--c-text-light)}
+.page-h{font-size:17px;font-weight:800;color:var(--c-primary);margin-bottom:10px}
+.page-t{font-size:15px;line-height:1.9;color:var(--c-text)}
+.book-nav{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.book-nav .btn{padding:8px 14px;font-size:14px;min-height:44px;flex:1}
+.book-dots{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;max-width:80px}
+.book-dots i{width:5px;height:5px;border-radius:50%;background:var(--c-accent)}
+.book-dots i.on{background:var(--c-primary);transform:scale(1.4)}
+.heart-anim-wrap{text-align:center;padding-top:20px}
+.heart-boy{font-size:64px;animation:bob 1.4s infinite}
+.heart-fly{font-size:26px;margin-top:10px;animation:heartFly 2s ease-in-out infinite}
+@keyframes heartFly{0%{transform:translateY(0);opacity:0}30%{opacity:1}100%{transform:translateY(-60px);opacity:0}}
+
+/* ============ 时间轴 ============ */
+.timeline{position:relative;padding-left:34px;margin:10px 0 20px}
+.timeline::before{content:'';position:absolute;left:13px;top:10px;bottom:10px;width:2px;
+  background:linear-gradient(180deg,var(--c-secondary),var(--c-accent));border-radius:2px}
+.tl-node{position:relative;margin-bottom:16px;cursor:pointer}
+.tl-dot{position:absolute;left:-34px;top:14px;width:28px;height:28px;border-radius:50%;
+  background:#fff;border:2px solid var(--c-secondary);display:flex;align-items:center;
+  justify-content:center;font-size:13px;box-shadow:var(--shadow);transition:all .3s}
+.tl-node.viewed .tl-dot{border-color:var(--c-primary);background:#FFF0F2}
+.tl-card{background:var(--c-card);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow);
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;transition:transform .2s}
+.tl-card:active{transform:scale(.985)}
+.tl-date{font-size:11px;color:var(--c-text-light)}
+.tl-title{font-size:15px;font-weight:700;flex:1}
+.tl-viewed{font-size:10px;color:var(--c-primary);background:#FFF0F2;padding:2px 8px;border-radius:999px}
+.tl-actions{display:flex;flex-direction:column;gap:10px}
+.tl-photo{max-height:38vh;overflow:hidden;border-radius:10px;margin-bottom:10px}
+.tl-photo img{width:100%;display:block}
+.tl-text{font-size:14px;line-height:1.9;text-align:left;white-space:pre-line;
+  font-family:"Kaiti SC",KaiTi,cursive;color:var(--c-primary)}
+.future-frame{aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;
+  border:2px dashed var(--c-accent);border-radius:10px;font-size:34px;color:var(--c-text-light);
+  margin-bottom:10px}
+.voice-big{text-align:center;padding:10px 0}
+.voice-play-big{width:72px;height:72px;border-radius:50%;background:var(--c-gradient);color:#fff;
+  font-size:26px;box-shadow:0 6px 20px rgba(232,61,50,.35);animation:glow 2s infinite}
+.voice-tip{font-size:12px;color:var(--c-text-light);margin-top:10px}
+
+/* ============ 未来订单 ============ */
+.wish-list{display:flex;flex-direction:column;gap:10px}
+.wish{display:flex;align-items:center;gap:10px;padding:14px;background:var(--c-card);
+  border-radius:12px;box-shadow:var(--shadow);border:2px solid transparent;text-align:left;
+  transition:all .2s;min-height:54px}
+.wish:active{transform:scale(.98)}
+.wish.on{border-color:var(--c-primary);background:#FFF6F4}
+.wish-box{width:22px;height:22px;border-radius:6px;border:2px solid var(--c-accent);
+  display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;flex-shrink:0}
+.wish.on .wish-box{background:var(--c-primary);border-color:var(--c-primary)}
+.wish-text{font-size:15px;line-height:1.5}
+.btn[disabled]{opacity:.45}
+.order-card{position:relative;background:linear-gradient(170deg,#FFFDF8,#FFF3E3);
+  border-radius:16px;padding:22px 18px;box-shadow:0 12px 30px rgba(232,61,50,.18);
+  border:1px solid rgba(255,212,90,.8);overflow:hidden;text-align:left}
+.order-head{font-size:15px;font-weight:900;color:var(--c-primary);letter-spacing:1px;
+  border-bottom:2px dashed rgba(232,61,50,.25);padding-bottom:10px;margin-bottom:6px}
+.order-no{font-size:11px;color:var(--c-text-light);margin-bottom:14px}
+.order-items{margin:0 0 14px}
+.order-items li{font-size:15px;padding:8px 0 8px 24px;position:relative;line-height:1.5;
+  border-bottom:1px dashed rgba(255,212,90,.9)}
+.order-items li::before{content:'🌷';position:absolute;left:0;font-size:13px}
+.order-meta p{font-size:12px;color:var(--c-text-light);padding:3px 0}
+.order-status{color:var(--c-primary)!important;font-weight:800;font-size:13px!important}
+.order-seal{position:absolute;right:-10px;bottom:-10px;font-size:70px;opacity:.12}
+
+/* ============ 时间胶囊 · 回忆重点版 ============ */
+.tl-card{position:relative}
+.tl-thumb{width:52px;height:52px;border-radius:10px;object-fit:cover;flex-shrink:0;
+  box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.tl-thumb-empty{display:flex;align-items:center;justify-content:center;font-size:22px;
+  background:linear-gradient(160deg,#FFF1F0,#FFE7E0)}
+.tl-info{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.tl-date{font-size:11px;color:var(--c-text-light)}
+.tl-date-blank{color:var(--c-primary);font-weight:700}
+.tl-viewed-new{color:#fff!important;background:var(--c-accent)!important}
+.tl-gallery{position:relative;border-radius:12px;overflow:hidden;margin-bottom:10px;
+  display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.tl-gallery .tl-slide{display:block;position:relative;aspect-ratio:3/4;overflow:hidden}
+.tl-gallery .tl-slide img{transition:transform .3s}
+.tl-gallery .tl-slide:active img{transform:scale(1.04)}
+.tl-gallery .tl-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.tl-gallery-dots{position:absolute;bottom:8px;left:0;right:0;display:flex;gap:5px;justify-content:center;z-index:2}
+.tl-gallery-dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.55);cursor:pointer}
+.tl-gallery-dots i.on{background:#fff}
+.tl-fill{background:var(--c-bg);border-radius:12px;padding:12px;margin-bottom:10px}
+.tl-fill-tip{font-size:13px;color:var(--c-text);margin-bottom:8px}
+.tl-fill-row{display:flex;align-items:center;gap:6px;justify-content:center}
+.tl-fill-row span{font-weight:800;color:var(--c-text-light)}
+.tl-fill-row input{width:64px;padding:9px 6px;border:2px solid var(--c-accent);border-radius:9px;
+  font-size:15px;text-align:center;background:#fff;color:var(--c-text)}
+.tl-fill-row input:focus{outline:none;border-color:var(--c-primary)}
+#fd-y{width:84px}
+
+/* ============ 时间胶囊 · 回忆重点版 ============ */
+.tl-card{position:relative}
+.tl-thumb{width:52px;height:52px;border-radius:10px;object-fit:cover;flex-shrink:0;
+  box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.tl-thumb-empty{display:flex;align-items:center;justify-content:center;font-size:22px;
+  background:linear-gradient(160deg,#FFF1F0,#FFE7E0)}
+.tl-info{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.tl-date{font-size:11px;color:var(--c-text-light)}
+.tl-date-blank{color:var(--c-primary);font-weight:700}
+.tl-viewed-new{color:#fff!important;background:var(--c-accent)!important}
+.tl-gallery{position:relative;border-radius:12px;overflow:hidden;margin-bottom:10px;
+  display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.tl-gallery .tl-slide{display:block;position:relative;aspect-ratio:3/4;overflow:hidden}
+.tl-gallery .tl-slide img{transition:transform .3s}
+.tl-gallery .tl-slide:active img{transform:scale(1.04)}
+.tl-gallery .tl-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.tl-gallery-dots{position:absolute;bottom:8px;left:0;right:0;display:flex;gap:5px;justify-content:center;z-index:2}
+.tl-gallery-dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.55);cursor:pointer}
+.tl-gallery-dots i.on{background:#fff}
+.tl-fill{background:var(--c-bg);border-radius:12px;padding:12px;margin-bottom:10px}
+.tl-fill-tip{font-size:13px;color:var(--c-text);margin-bottom:8px}
+.tl-fill-row{display:flex;align-items:center;gap:6px;justify-content:center}
+.tl-fill-row span{font-weight:800;color:var(--c-text-light)}
+.tl-fill-row input{width:64px;padding:9px 6px;border:2px solid var(--c-accent);border-radius:9px;
+  font-size:15px;text-align:center;background:#fff;color:var(--c-text)}
+.tl-fill-row input:focus{outline:none;border-color:var(--c-primary)}
+#fd-y{width:84px}
+
+/* 日期选择：原生 date 选择器 + 手动输入双通道 */
+.tl-fill-alt{display:flex;align-items:center;gap:8px;margin-top:10px;justify-content:center}
+.tl-fill-alt input[type="date"]{padding:8px 10px;border:2px solid var(--c-accent);border-radius:9px;
+  font-size:14px;background:#fff;color:var(--c-text)}
+.tl-fill-alt input[type="date"]:focus{outline:none;border-color:var(--c-primary)}
+.tl-fill-alt-tip{font-size:12px;color:var(--c-text-light)}
+
+/* 日期选择：原生 date 选择器 + 手动输入双通道 */
+.tl-fill-alt{display:flex;align-items:center;gap:8px;margin-top:10px;justify-content:center}
+.tl-fill-alt input[type="date"]{padding:8px 10px;border:2px solid var(--c-accent);border-radius:9px;
+  font-size:14px;background:#fff;color:var(--c-text)}
+.tl-fill-alt input[type="date"]:focus{outline:none;border-color:var(--c-primary)}
+.tl-fill-alt-tip{font-size:12px;color:var(--c-text-light)}
+
+/* ============ 答题：蛇彩蛋 + 大A小巧思 ============ */
+.quiz-snake{display:inline-block;margin-left:8px;font-size:20px;vertical-align:-3px;
+  animation:snakeCrawl 2.4s ease-in-out infinite}
+@keyframes snakeCrawl{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(5px) rotate(8deg)}
+  75%{transform:translateX(-5px) rotate(-8deg)}}
+.quiz-bigA .quiz-opt:first-child{font-size:20px;font-weight:900;min-height:84px;
+  background:linear-gradient(160deg,#FFF6E8,#FFEFD8);border:2px solid var(--c-accent);
+  box-shadow:0 6px 18px rgba(232,61,50,.18);animation:bigAcall 1.6s ease-in-out infinite}
+.quiz-bigA .quiz-opt:nth-child(n+2){font-size:11px;min-height:34px;padding:7px 10px;opacity:.55}
+@keyframes bigAcall{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+
+/* ============ 答题：蛇彩蛋 + 大A小巧思 ============ */
+.quiz-snake{display:inline-block;margin-left:8px;font-size:20px;vertical-align:-3px;
+  animation:snakeCrawl 2.4s ease-in-out infinite}
+@keyframes snakeCrawl{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(5px) rotate(8deg)}
+  75%{transform:translateX(-5px) rotate(-8deg)}}
+.quiz-bigA .quiz-opt:first-child{font-size:20px;font-weight:900;min-height:84px;
+  background:linear-gradient(160deg,#FFF6E8,#FFEFD8);border:2px solid var(--c-accent);
+  box-shadow:0 6px 18px rgba(232,61,50,.18);animation:bigAcall 1.6s ease-in-out infinite}
+.quiz-bigA .quiz-opt:nth-child(n+2){font-size:11px;min-height:34px;padding:7px 10px;opacity:.55}
+@keyframes bigAcall{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+
+/* ============ 转盘助力（拼多多式） ============ */
+.invite-progress{margin-top:14px;background:var(--c-bg);border-radius:12px;padding:12px}
+.ip-bar{height:8px;border-radius:4px;background:#FFE3C2;overflow:hidden}
+.ip-bar i{display:block;height:100%;border-radius:4px;
+  background:linear-gradient(90deg,#FFB347,#E83D32);transition:width .6s}
+.ip-text{font-size:12px;color:var(--c-text-light);margin-top:8px}
+.ip-text b{color:var(--c-primary)}
+.invite-tip{font-size:13px;color:var(--c-text-light);margin-bottom:8px}
+.invite-msg{background:linear-gradient(160deg,#FFF6E8,#FFEFD8);border:2px dashed var(--c-accent);
+  border-radius:12px;padding:14px;font-size:15px;font-weight:700;line-height:1.7;
+  color:var(--c-primary);text-align:center}
+
+/* ============ 转盘助力（拼多多式） ============ */
+.invite-progress{margin-top:14px;background:var(--c-bg);border-radius:12px;padding:12px}
+.ip-bar{height:8px;border-radius:4px;background:#FFE3C2;overflow:hidden}
+.ip-bar i{display:block;height:100%;border-radius:4px;
+  background:linear-gradient(90deg,#FFB347,#E83D32);transition:width .6s}
+.ip-text{font-size:12px;color:var(--c-text-light);margin-top:8px}
+.ip-text b{color:var(--c-primary)}
+.invite-tip{font-size:13px;color:var(--c-text-light);margin-bottom:8px}
+.invite-msg{background:linear-gradient(160deg,#FFF6E8,#FFEFD8);border:2px dashed var(--c-accent);
+  border-radius:12px;padding:14px;font-size:15px;font-weight:700;line-height:1.7;
+  color:var(--c-primary);text-align:center}
+
+
+/* -- 时间胶囊视频支持 -- */
+.tl-slide.has-video{grid-column:1/-1;aspect-ratio:16/9}
+.tl-slide video{width:100%;height:100%;object-fit:cover;display:block;background:#000}
+video.tl-thumb{background:#000}
+
+
+/* -- 时间胶囊视频支持 -- */
+.tl-slide.has-video{grid-column:1/-1;aspect-ratio:16/9}
+.tl-slide video{width:100%;height:100%;object-fit:cover;display:block;background:#000}
+video.tl-thumb{background:#000}

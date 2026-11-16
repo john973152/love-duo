@@ -1,0 +1,77 @@
+/* ============ 主题变量（核心：前电商红 / 后浪漫粉 的切换框架） ============ */
+body.theme-shopping{
+  --c-primary:#E83D32; --c-secondary:#FF8A38; --c-accent:#FFD45A;
+  --c-bg:#FFF5F1; --c-card:#FFFFFF; --c-text:#3B2B26; --c-text-light:#9A8B85;
+  --c-gradient:linear-gradient(135deg,#E83D32 0%,#FF8A38 100%);
+  --radius:14px; --shadow:0 4px 16px rgba(232,61,50,.14);
+}
+body.theme-romantic{
+  --c-primary:#C75B85; --c-secondary:#E9C98C; --c-accent:#F7D7E5;
+  --c-bg:#FFF9F4; --c-card:#FFF0F5; --c-text:#6B4457; --c-text-light:#B99AA8;
+  --c-gradient:linear-gradient(135deg,#F7D7E5 0%,#FFF0F5 60%,#E9C98C 100%);
+  --shadow:0 4px 18px rgba(199,91,133,.14);
+}
+body{background:var(--c-bg);color:var(--c-text);transition:background .8s ease}
+
+/* ============ 通用按钮 / 卡片 ============ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  min-height:48px;padding:12px 28px;border-radius:999px;font-size:17px;font-weight:700;
+  transition:transform .15s ease,box-shadow .2s;user-select:none;-webkit-tap-highlight-color:transparent}
+.btn:active{transform:scale(.95)}
+.btn-primary{background:var(--c-gradient);color:#fff;box-shadow:var(--shadow)}
+.btn-ghost{border:1.5px solid var(--c-primary);color:var(--c-primary);background:transparent}
+.card{background:var(--c-card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
+.img-placeholder{display:flex;align-items:center;justify-content:center;min-height:120px;
+  background:var(--c-accent);color:var(--c-text-light);font-size:12px;border-radius:10px;
+  padding:10px;text-align:center;word-break:break-all}
+
+/* ============ 顶部导航 ============ */
+#app-header{display:none;position:sticky;top:0;z-index:50;padding:10px 14px calc(10px);
+  padding-top:calc(10px + env(safe-area-inset-top));
+  background:var(--c-card);box-shadow:0 2px 10px rgba(0,0,0,.06)}
+#app-header.show{display:flex;align-items:center;gap:10px}
+.back-btn{width:36px;height:36px;border-radius:50%;background:var(--c-bg);
+  font-size:22px;line-height:1;color:var(--c-primary);flex-shrink:0}
+.header-info{flex:1;min-width:0;display:flex;flex-direction:column}
+.header-name{font-weight:700;font-size:15px}
+.header-progress{font-size:11px;color:var(--c-text-light)}
+.header-bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--c-accent)}
+.header-bar i{display:block;height:100%;background:var(--c-gradient);transition:width .5s ease}
+
+/* ============ 弹窗 ============ */
+.modal-mask{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.5);
+  display:flex;align-items:center;justify-content:center;padding:24px;animation:fadeIn .2s}
+.modal-box{position:relative;width:100%;max-width:340px;background:var(--c-card);
+  border-radius:18px;padding:24px 20px;text-align:center;animation:popIn .25s ease}
+.modal-mask.closing{animation:fadeOut .2s forwards}
+.modal-close{position:absolute;top:8px;right:12px;font-size:24px;color:var(--c-text-light);padding:4px}
+.modal-title{font-size:18px;margin-bottom:10px;color:var(--c-primary)}
+.modal-body{font-size:14px;color:var(--c-text);white-space:pre-line}
+.modal-actions{margin-top:18px;display:flex;flex-direction:column;gap:10px}
+.modal-actions .btn{width:100%}
+
+/* 场景切换 */
+.scene-leave{opacity:0;transform:translateY(10px);transition:all .25s ease}
+.scene-enter{opacity:0;transform:translateY(10px)}
+#scene-container{transition:opacity .25s ease,transform .25s ease;
+  min-height:100vh;max-width:520px;margin:0 auto;padding:0 14px calc(30px + env(safe-area-inset-bottom))}
+
+/* 屏幕阅读器辅助 */
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+
+/* toast 轻提示 */
+#ld-toast{position:fixed;left:50%;bottom:18%;transform:translateX(-50%) translateY(8px);
+  z-index:9999;background:rgba(0,0,0,.78);color:#fff;font-size:13px;padding:10px 18px;
+  border-radius:999px;opacity:0;pointer-events:none;transition:all .25s;white-space:nowrap}
+#ld-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* 已通关章节：已领取封印样式（不可再进入） */
+.stage-item.done{cursor:pointer}
+.stage-item.done .si-name{opacity:.75}
+.stage-item.done::after{content:'已领取';position:absolute;top:-6px;right:-6px;
+  background:var(--c-gradient);color:#fff;font-size:10px;font-weight:800;
+  padding:3px 8px;border-radius:999px 999px 999px 2px;box-shadow:0 2px 6px rgba(232,61,50,.35)}

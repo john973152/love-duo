@@ -12,7 +12,9 @@
  *   - 场景切换 crossfade（audio.scene(id)），离开自动淡出
  *   - 重要音效自动 ducking（音乐短暂压低）
  *   - 同名音效 70ms 内防叠加；高优先级可打断低优先级
- *   - 音乐/音效独立音量 + 开关，localStorage 持久化（默认：音效开、背景音乐关）
+ *   - 音乐/音效/场景音乐独立开关 + 音量，localStorage 持久化
+ *     （默认：音效开、程序化背景音乐关、场景音乐开）
+ *   - 场景专属音频文件（SCENE_FILE，如时间胶囊《有我呢》）进场景自动淡入，离开淡出
  *   - 页面进入后台自动降音，回前台恢复
  *   - 浏览器自动播放限制：首次用户交互后解锁
  *   - 所有播放失败静默降级，绝不影响游戏逻辑
@@ -39,13 +41,14 @@ function note(n) {
 // v2：默认改为「音效开、背景音乐关」（用户偏好；换 key 避免旧 v1 记录覆盖新默认）
 const STORE_KEY = 'ld-audio-v2';
 function loadPrefs() {
-  const DEFAULTS = { music: false, sfx: true, musicVol: 0.65, sfxVol: 0.85 };
+  const DEFAULTS = { music: false, sfx: true, sceneMusic: true, musicVol: 0.65, sfxVol: 0.85 };
   try {
     const legacyMuted = localStorage.getItem('ld-muted') === '1';
     const p = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
     return {
-      music: p.music === true,                       // 音乐默认关，需显式开启
+      music: p.music === true,                       // 程序化背景音乐默认关，需显式开启
       sfx: p.sfx !== false && !legacyMuted,          // 音效默认开
+      sceneMusic: p.sceneMusic !== false && !legacyMuted, // 场景专属音乐（如时间胶囊的《有我呢》）默认开
       musicVol: typeof p.musicVol === 'number' ? p.musicVol : DEFAULTS.musicVol,
       sfxVol: typeof p.sfxVol === 'number' ? p.sfxVol : DEFAULTS.sfxVol
     };
@@ -58,8 +61,14 @@ const SCENE_MUSIC = {
   home: 'home',
   wheel: 'gentle', quiz: 'gentle', puzzle: 'gentle',
   treasure: 'treasure',
-  manual: 'gentle', timeline: 'gentle', order: 'gentle',
+  manual: 'gentle', order: 'gentle',
   final: 'letter'
+};
+
+// ============ 场景专属音频文件（真实歌曲，优先于程序化主题） ============
+// volume 是相对音量（再乘「音乐音量」滑块），进入场景即自动淡入播放
+const SCENE_FILE = {
+  timeline: { src: 'assets/audio/capsule-bgm.mp3', volume: 0.62 } // 时间胶囊：《有我呢》
 };
 
 // ============ 程序化音乐主题 ============
@@ -146,6 +155,7 @@ function ac() {
       document.addEventListener('visibilitychange', () => {
         _bgVisible = document.visibilityState === 'visible';
         applyVolumes();
+        if (_musicFile) fadeFileTo(fileVolume(_fileNatural), 600);
       });
     } catch { return null; }
   }
@@ -233,6 +243,69 @@ function pianoNote(freq, { dur = 1.6, delay = 0, vol = 0.11, bus = null }) {
   tone({ freq, type: 'sine', dur, delay, vol, attack: 0.02, bus });
   tone({ freq: freq * 2, type: 'sine', dur: dur * 0.6, delay, vol: vol * 0.25, attack: 0.02, bus });
   tone({ freq: freq * 3.01, type: 'sine', dur: dur * 0.35, delay, vol: vol * 0.08, attack: 0.02, bus });
+}
+
+// ============ 文件音乐（真实音频文件，如时间胶囊的《有我呢》） ============
+let _fileFadeTimer = null;
+let _fileNatural = 0.6;             // 当前文件的基准音量（未经滑块缩放）
+
+/** 目标音量：受「音乐音量」滑块与「场景音乐」开关约束；「背景音乐」开关单独处理 */
+function fileVolume(natural, ignoreSwitch = false) {
+  if (!ignoreSwitch && !prefs.sceneMusic) return 0;
+  const bg = _bgVisible ? 1 : 0.15;
+  return Math.max(0, Math.min(1, natural * prefs.musicVol * bg));
+}
+
+/** 平滑调整文件音量（避免突兀） */
+function fadeFileTo(target, ms = 1200) {
+  clearInterval(_fileFadeTimer);
+  const el = _musicFile;
+  if (!el) return;
+  const from = el.volume;
+  if (Math.abs(target - from) < 0.02) { try { el.volume = target; } catch { /* 忽略 */ } return; }
+  const steps = Math.max(1, Math.round(ms / 60));
+  let i = 0;
+  _fileFadeTimer = setInterval(() => {
+    if (_musicFile !== el) { clearInterval(_fileFadeTimer); return; }
+    i++;
+    try { el.volume = Math.max(0, Math.min(1, from + (target - from) * (i / steps))); } catch { /* 忽略 */ }
+    if (i >= steps) { clearInterval(_fileFadeTimer); _fileFadeTimer = null; }
+  }, 60);
+}
+
+/** 播放场景文件（同一首复用实例；换曲先停旧的） */
+function playSceneFile({ src, volume = 0.6 }) {
+  if (!src) return null;
+  _fileNatural = volume;
+  if (_musicFile && _musicFile.dataset.ldSrc === src) {
+    if (_musicFile.paused) _musicFile.play().catch(() => { /* 需交互，静默 */ });
+    fadeFileTo(fileVolume(volume), 900);
+    return _musicFile;
+  }
+  stopMusicEngine();
+  stopAmbient();
+  if (_musicFile) { try { _musicFile.pause(); } catch { /* 忽略 */ } _musicFile = null; }
+  let el;
+  try { el = new Audio(src); } catch { return null; }
+  el.loop = true;
+  el.preload = 'auto';
+  el.volume = 0;
+  try { el.dataset.ldSrc = src; } catch { /* 忽略 */ }
+  _musicFile = el;
+  const target = fileVolume(volume);
+  const start = () => {
+    if (_musicFile !== el) return;
+    el.play().then(() => fadeFileTo(target, 1800)).catch(() => { /* 自动播放被拦，等交互 */ });
+  };
+  start();
+  // 浏览器自动播放拦截时：下一次任意点击再补一次
+  window.addEventListener('pointerdown', start, { once: true, capture: true });
+  return el;
+}
+
+function stopFileNow() {
+  clearInterval(_fileFadeTimer);
+  if (_musicFile) { try { _musicFile.pause(); } catch { /* 忽略 */ } _musicFile = null; }
 }
 
 // ============ 场景音乐引擎（程序化） ============
@@ -346,29 +419,65 @@ export const audio = {
     startSceneAudio(id);
   },
 
-  /** 播放用户自定义音乐文件（如时间胶囊的 bgm.mp3；与主题音乐互斥，fade 切换） */
+  /** 播放用户自定义音乐文件（与场景主题音乐互斥） */
   playFile(src, { volume = 0.5 } = {}) {
-    const a = ac(); if (!a || !src) return null;
+    if (!src) return null;
     stopMusicEngine();
-    if (_musicFile) { try { _musicFile.pause(); } catch { /* 忽略 */ } _musicFile = null; }
-    if (_ambient) stopAmbient();
-    const el = new Audio(src);
-    el.loop = true;
-    el.volume = prefs.music ? Math.min(volume, prefs.musicVol) : 0;
-    el.play().catch(() => { /* 文件不存在或需交互，静默 */ });
-    _musicFile = el;
-    return el;
+    stopAmbient();
+    return playSceneFile({ src, volume });
   },
 
   /** 停止文件音乐并回到场景主题 */
   stopFile() {
-    if (_musicFile) { try { _musicFile.pause(); } catch { /* 忽略 */ } _musicFile = null; }
+    stopFileNow();
     if (_scene && _unlocked) startSceneAudio(_scene);
   },
 
-  setMusicVolume(v) { prefs.musicVol = Math.max(0, Math.min(1, v)); savePrefs(prefs); applyVolumes(); },
+  /** 当前是否有文件音乐在响 */
+  filePlaying() { return !!_musicFile && !_musicFile.paused && _musicFile.volume > 0.001; },
+
+  /** 暂停文件音乐（淡出后暂停，保留进度） */
+  pauseFile() {
+    const el = _musicFile;
+    if (!el) return;
+    fadeFileTo(0, 320);
+    setTimeout(() => { if (_musicFile === el) { try { el.pause(); } catch { /* 忽略 */ } } }, 360);
+  },
+
+  /** 继续播放文件音乐（无文件实例时返回 false，由调用方自行发起播放） */
+  resumeFile() {
+    if (!_musicFile) return false;
+    _musicFile.play().catch(() => { /* 忽略 */ });
+    fadeFileTo(fileVolume(_fileNatural), 900);
+    return true;
+  },
+
+  setMusicVolume(v) {
+    prefs.musicVol = Math.max(0, Math.min(1, v));
+    savePrefs(prefs); applyVolumes();
+    if (_musicFile) fadeFileTo(fileVolume(_fileNatural), 300);
+  },
   setSfxVolume(v) { prefs.sfxVol = Math.max(0, Math.min(1, v)); savePrefs(prefs); applyVolumes(); },
-  setMusicOn(on) { prefs.music = !!on; savePrefs(prefs); applyVolumes(); if (!on) { stopMusicEngine(); stopAmbient(); } else if (_scene) startSceneAudio(_scene); },
+  setMusicOn(on) {
+    prefs.music = !!on; savePrefs(prefs); applyVolumes();
+    if (!on) {
+      // 一键静音：连场景文件音乐一起淡出
+      stopMusicEngine(); stopAmbient();
+      if (_musicFile) fadeFileTo(0, 400);
+    } else if (_scene && SCENE_FILE[_scene] && _musicFile) {
+      // 场景有专属音乐：恢复它的音量，不叠加程序化主题
+      if (_musicFile.paused) _musicFile.play().catch(() => { /* 忽略 */ });
+      fadeFileTo(fileVolume(_fileNatural), 700);
+    } else if (_scene) {
+      startSceneAudio(_scene);
+    }
+  },
+
+  /** 场景专属音乐（如时间胶囊的《有我呢》）开关 */
+  setSceneMusicOn(on) {
+    prefs.sceneMusic = !!on; savePrefs(prefs);
+    if (_musicFile) fadeFileTo(fileVolume(_fileNatural), 500);
+  },
   setSfxOn(on) { prefs.sfx = !!on; savePrefs(prefs); applyVolumes(); },
   getPrefs() { return { ...prefs }; },
 
@@ -376,7 +485,11 @@ export const audio = {
   destroy() { stopMusicEngine(); stopAmbient(); if (_musicFile) { try { _musicFile.pause(); } catch { /* 忽略 */ } } },
 
   /** 调试探针：返回当前音频系统状态 */
-  _dbg: () => ({ scene: _scene, unlocked: _unlocked, music: _music?.theme || null, file: !!_musicFile, ambient: !!_ambient, ctx: _ctx?.state || 'none' }),
+  _dbg: () => ({
+    scene: _scene, unlocked: _unlocked, music: _music?.theme || null, ambient: !!_ambient,
+    file: _musicFile ? { src: (_musicFile.dataset?.ldSrc || '').split('/').pop(), paused: _musicFile.paused, vol: +_musicFile.volume.toFixed(2) } : null,
+    ctx: _ctx?.state || 'none'
+  }),
 
   _test: { THEMES, note } // 供测试用
 };
@@ -385,9 +498,19 @@ export const audio = {
 if (typeof window !== 'undefined') window.__ldAudio = audio;
 
 function startSceneAudio(id) {
+  // 1. 场景有专属音频文件（如时间胶囊的《有我呢》）→ 直接播文件，不叠加程序化主题
+  const file = SCENE_FILE[id];
+  if (file) {
+    stopMusicEngine();
+    stopAmbient();
+    playSceneFile(file);
+    applyVolumes();
+    return;
+  }
+
+  // 2. 普通场景：程序化主题（音乐开关关闭时不起引擎）
+  stopFileNow();
   const theme = SCENE_MUSIC[id];
-  stopFile(/** 不回到场景 */ true);
-  // 音乐默认关：关闭时不启动引擎/环境音（开了再启动），避免空转调度
   if (!prefs.music) { stopMusicEngine(); stopAmbient(); applyVolumes(); return; }
   if (theme) {
     if (!_music || _music.theme !== theme) startMusicEngine(theme);
@@ -396,10 +519,6 @@ function startSceneAudio(id) {
     stopMusicEngine();
   }
   applyVolumes();
-}
-function stopFile(keepScene) {
-  if (_musicFile) { try { _musicFile.pause(); } catch { /* 忽略 */ } _musicFile = null; }
-  if (!keepScene && _scene && _unlocked) startSceneAudio(_scene);
 }
 
 // ============ 音效库（全柔和重设计） ============
@@ -593,16 +712,18 @@ export function setupSoundSettings() {
   const p = audio.getPrefs();
   panel.innerHTML = `
     <div class="snd-title">♫ 声音设置</div>
+    <div class="snd-row"><label><input type="checkbox" id="snd-scene" ${p.sceneMusic ? 'checked' : ''}>场景音乐</label></div>
     <div class="snd-row"><label><input type="checkbox" id="snd-music" ${p.music ? 'checked' : ''}>背景音乐</label></div>
     <input type="range" id="snd-music-vol" min="0" max="100" value="${Math.round(p.musicVol * 100)}">
     <div class="snd-row"><label><input type="checkbox" id="snd-sfx" ${p.sfx ? 'checked' : ''}>音效</label></div>
     <input type="range" id="snd-sfx-vol" min="0" max="100" value="${Math.round(p.sfxVol * 100)}">
   `;
 
-  const icon = () => { const q = audio.getPrefs(); fab.textContent = (q.music || q.sfx) ? '♫' : '🔇'; };
+  const icon = () => { const q = audio.getPrefs(); fab.textContent = (q.music || q.sfx || q.sceneMusic) ? '♫' : '🔇'; };
   icon();
 
   fab.addEventListener('click', () => panel.classList.toggle('open'));
+  panel.querySelector('#snd-scene').addEventListener('change', e => { audio.setSceneMusicOn(e.target.checked); icon(); });
   panel.querySelector('#snd-music').addEventListener('change', e => { audio.setMusicOn(e.target.checked); icon(); });
   panel.querySelector('#snd-sfx').addEventListener('change', e => { audio.setSfxOn(e.target.checked); icon(); });
   panel.querySelector('#snd-music-vol').addEventListener('input', e => audio.setMusicVolume(e.target.value / 100));

@@ -23,13 +23,9 @@ const C = CONFIG.capsule;
 const LAYOUTS = ['C', 'B', 'A', 'B', 'B', 'B', 'B', 'D', 'B', 'B', 'B', 'B', 'B', 'A', 'B', 'C', 'B', 'B', 'F'];
 const DIVIDERS = ['✿', '❀', '♡', '✧'];
 
-// ---------- 背景音乐（模块级单例，同一时间只有一条音频） ----------
-let bgmAudio = null;
+// ---------- 背景音乐（统一由 AudioManager 管理：进入本场景自动播放《有我呢》） ----------
 document.addEventListener('scene:changed', () => {
-  if (bgmAudio && !bgmAudio.paused) {
-    bgmAudio.pause();
-    document.querySelectorAll('.cp-music').forEach(b => { b.textContent = '♪'; b.classList.remove('playing'); });
-  }
+  document.querySelectorAll('.cp-music').forEach(b => { b.textContent = '♪'; b.classList.remove('playing'); });
 });
 
 export function render(el) {
@@ -242,39 +238,32 @@ export function render(el) {
   // 3. 日期补记
   el.querySelectorAll('.cp-filldate').forEach(box => setupFillDate(box));
 
-  // 4. 背景音乐开关（统一走 AudioManager 的文件通道，与场景主题音乐互斥）
+  // 4. 背景音乐开关（音乐由 AudioManager 在进入场景时自动播放，这里只管暂停/继续）
   const musicBtn = el.querySelector('#cp-music');
+  const syncMusicBtn = () => {
+    const on = audioMgr.filePlaying();
+    musicBtn.textContent = on ? '♫' : '♪';
+    musicBtn.classList.toggle('playing', on);
+  };
   musicBtn.addEventListener('click', () => {
-    if (!bgmAudio) {
-      bgmAudio = audioMgr.playFile(CONFIG.assets.bgm, { volume: 0.4 });
-      if (bgmAudio) bgmAudio.addEventListener('error', () =>
-        toast('还没有添加音乐文件 public/assets/audio/bgm.mp3'));
-      if (!bgmAudio) { toast('音频暂时不可用'); return; }
-    }
-    if (bgmAudio.paused) {
-      bgmAudio.play().then(() => {
-        musicBtn.textContent = '♫';
-        musicBtn.classList.add('playing');
-        toast('♪ 柔和的背景音乐已开启');
-      }).catch(() => {
-        toast(bgmAudio.error || bgmAudio.networkState === 3
-          ? '还没有添加音乐文件 public/assets/audio/bgm.mp3'
-          : '再点一次试试～');
-      });
+    if (audioMgr.filePlaying()) {
+      audioMgr.pauseFile();
+      setTimeout(syncMusicBtn, 400);
     } else {
-      bgmAudio.pause();
-      musicBtn.textContent = '♪';
-      musicBtn.classList.remove('playing');
+      if (!audioMgr.resumeFile()) audioMgr.playFile(CONFIG.assets.bgm, { volume: 0.62 });
+      musicBtn.textContent = '♫';
+      musicBtn.classList.add('playing');
+      toast('♪ 《有我呢》继续')
     }
   });
-  if (bgmAudio && !bgmAudio.paused) { musicBtn.textContent = '♫'; musicBtn.classList.add('playing'); }
+  setTimeout(syncMusicBtn, 600);
 
   // 5. 视频互斥：同一时间只播一个视频；视频播放时自动暂停背景音乐
   el.querySelectorAll('.cp-ph-media video').forEach(v => {
     v.addEventListener('play', () => {
       el.querySelectorAll('video').forEach(o => { if (o !== v && !o.paused) o.pause(); });
-      if (bgmAudio && !bgmAudio.paused) {
-        bgmAudio.pause();
+      if (audioMgr.filePlaying()) {
+        audioMgr.pauseFile();
         musicBtn.textContent = '♪';
         musicBtn.classList.remove('playing');
       }
@@ -293,7 +282,7 @@ export function render(el) {
   eio.observe(ending);
 
   el.querySelector('#cp-next').addEventListener('click', () => {
-    if (bgmAudio) bgmAudio.pause();
+    audioMgr.pauseFile();
     window.__complete('timeline', {
       title: '⏳ 时间胶囊已成功开启',
       text: '检测到还有一份来自未来的订单。', ctaText: '去看看未来订单 ›'
@@ -397,7 +386,7 @@ export function render(el) {
 
   // ---------- 专属语音（保留原有功能） ----------
   function openVoice() {
-    if (bgmAudio && !bgmAudio.paused) bgmAudio.pause();
+    audioMgr.pauseFile();
     const audio = new Audio(CONFIG.assets.voice);
     const m = showModal({
       title: '🎙️ 专属语音',
@@ -406,7 +395,9 @@ export function render(el) {
           <p class="voice-tip">点击开始播放（约 30～60 秒）</p>
           <p class="voice-done" id="vd" style="display:none;color:var(--c-primary);font-weight:700;margin-top:8px">语音已播完 ♡</p>
         </div>`,
-      buttons: [{ text: '关闭' }]
+      buttons: [{ text: '关闭' }],
+      // 关闭语音时停掉语音、把背景音乐接回来（不会重复叠加）
+      onClose: () => { audio.pause(); audioMgr.resumeFile(); }
     });
     const btn = m.el.querySelector('#vp');
     btn.addEventListener('click', () => {
@@ -420,6 +411,5 @@ export function render(el) {
       btn.textContent = '▶';
       m.el.querySelector('#vd').style.display = 'block';
     });
-    m.onCloseCleanup = () => { audio.pause(); };
   }
 }

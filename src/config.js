@@ -21,7 +21,7 @@ export const CONFIG = {
     giftWarm: 'assets/images/gifts/warm.jpg',       // 暖手宝照片
     giftLotion: 'assets/images/gifts/lotion.jpg',   // 身体乳照片
     anniversaryVideo: 'assets/videos/anniversary.mp4', // 最终视频（可能删除，删除后流程自动跳过视频）
-    bgm: 'assets/audio/bgm.mp3',                    // 背景音乐
+    bgm: 'assets/audio/capsule-bgm.mp3',            // 时间胶囊背景音乐（郭一凡《有我呢》）
     voice: 'assets/audio/voice.mp3',                // 专属语音
     letterPhoto: 'assets/images/letter/handwritten.jpg' // 手写信照片
   },
